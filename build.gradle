@@ -1,44 +1,128 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.4.4'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'                                   // Support for Java projects
+    id 'org.springframework.boot' version '3.4.4'  // Spring Boot plugin for application development
+    id 'io.spring.dependency-management' version '1.1.7'  // Dependency version management
+    id 'jacoco'                                 // Code coverage reporting
+    id 'com.diffplug.spotless' version '6.25.0' // Code formatting and style enforcement
 }
 
-group = 'com.event-registration'
-version = '0.0.1-SNAPSHOT'
+group = 'com.event-registration'                // Project group identifier
+version = '0.0.1-SNAPSHOT'                      // Project version
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(21)  // Specify Java version
     }
+}
+
+ext {
+    // Define versions for external libraries
+    mapstructVersion = '1.6.3'
+    lombokVersion = '1.18.34'
+    lombokMapstructBindingVersion = '0.2.0'
+    testContainersVersion = '1.20.2'
 }
 
 configurations {
     compileOnly {
-        extendsFrom annotationProcessor
+        extendsFrom annotationProcessor         // Configuration for annotation processors
     }
 }
 
 repositories {
-    mavenCentral()
+    mavenCentral()                              // Central repository for dependency resolution
 }
 
 dependencies {
+    // Spring Boot Starters for core functionality
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
+
+    // Database drivers for persistence
     runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+
+    // Lombok for reducing boilerplate code
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    // MapStruct for entity-DTO mapping
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+
+    // Development tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // OpenAPI/Swagger for API documentation
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // Test dependencies for unit and integration testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
+    testImplementation "org.testcontainers:postgresql:${testContainersVersion}"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// Test task configuration
 tasks.named('test') {
-    useJUnitPlatform()
+    useJUnitPlatform()                          // Enable JUnit Platform
+    finalizedBy jacocoTestReport                // Run coverage report after tests
+}
+
+// JaCoCo configuration for code coverage
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+jacocoTestReport {
+    dependsOn test                              // Ensure tests run first
+    reports {
+        xml.required = true                     // Generate XML report
+        html.required = true                    // Generate HTML report
+        csv.required = false                    // Disable CSV report
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'com/event-registration/dto/**',
+                    'com/event-registration/entity/**',
+                    'com/event-registration/mapper/**',
+                    'com/event-registration/config/**'
+            ])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8                   // Enforce minimum coverage
+            }
+        }
+    }
+}
+
+// Spotless configuration for code formatting
+spotless {
+    java {
+        removeUnusedImports()                   // Clean up imports
+        trimTrailingWhitespace()                // Remove trailing whitespace
+        endWithNewline()                        // Ensure file ends with newline
+        indentWithTabs(4)                       // Use tabs for indentation
+        palantirJavaFormat()                    // Apply Palantir formatting
+        importOrder('java', 'jakarta', 'org', 'com', '')  // Define import order
+    }
+}
+
+tasks.named('build') {
+    dependsOn spotlessApply                    // Apply formatting during build
 }
