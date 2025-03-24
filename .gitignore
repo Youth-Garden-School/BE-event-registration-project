@@ -5,10 +5,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-/src/main/resources/*.yml
-/src/main/resources/**/*.yml
-/src/main/resources/*.properties
-/src/main/resources/**/*.properties
+/src/main/resources/*-prod.yml
+/src/main/resources/**/*-prod.yml
+/src/main/resources/*-prod.properties
+/src/main/resources/**/*-prod.properties
 
 ### STS ###
 .apt_generated

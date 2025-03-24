@@ -1,0 +1,35 @@
+
+
+spring:
+  datasource:
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PASSWORD}
+    url: ${DBMS_CONNECTION}
+    driverClassName: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # camelCase
+      ddl-auto: update
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    org:
+      hibernate:
+        engine:
+          jdbc:
+            spi:
+              SqlExceptionHelper: DEBUG
+      springframework:
+        web: DEBUG
+
+jwt:
+  signerKey: <secret-key>
+  valid-duration: 000 # in second
+  refreshable-duration: 00 # in second
