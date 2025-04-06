@@ -11,7 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.eventregistration.dto.response.common.ApiResponse;
+import com.eventregistration.dto.ApiResponse;
 
 import lombok.extern.slf4j.Slf4j;
 

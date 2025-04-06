@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,11 +46,11 @@ public class ApiKeyConfig {
 
     @NotBlank(message = "API_KEY_JWT_REFRESH_REQUIRED")
     String jwtRefresh;
-    
+
     @NotNull(message = "API_KEY_JWT_ACCESS_DURATION_REQUIRED")
     @Min(value = 1, message = "API_KEY_JWT_DURATION_INVALID")
     long jwtAccessDuration;
-    
+
     @NotNull(message = "API_KEY_JWT_REFRESH_DURATION_REQUIRED")
     @Min(value = 1, message = "API_KEY_JWT_DURATION_INVALID")
     long jwtRefreshDuration;

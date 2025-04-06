@@ -1,4 +1,4 @@
-package com.eventregistration.dto.response.common;
+package com.eventregistration.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

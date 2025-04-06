@@ -1,5 +1,3 @@
 package com.eventregistration.service;
 
-public interface UserService {
-    
-}
+public interface UserService {}

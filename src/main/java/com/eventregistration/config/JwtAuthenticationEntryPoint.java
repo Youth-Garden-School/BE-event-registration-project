@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import com.eventregistration.dto.response.common.ApiResponse;
+import com.eventregistration.dto.ApiResponse;
 import com.eventregistration.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

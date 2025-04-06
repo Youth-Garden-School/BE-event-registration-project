@@ -1,12 +1,13 @@
 package com.eventregistration.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
-import jakarta.annotation.PostConstruct;
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)

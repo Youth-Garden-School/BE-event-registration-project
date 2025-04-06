@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -42,7 +41,9 @@ public class JwtTokenProvider {
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now()
                         .plus(
-                                Objects.equals(keyType, "access") ? apiKeyConfig.getJwtAccessDuration() : apiKeyConfig.getJwtRefreshDuration(),
+                                Objects.equals(keyType, "access")
+                                        ? apiKeyConfig.getJwtAccessDuration()
+                                        : apiKeyConfig.getJwtRefreshDuration(),
                                 ChronoUnit.SECONDS)
                         .toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
@@ -55,7 +56,8 @@ public class JwtTokenProvider {
 
         try {
             jwsObject.sign(new MACSigner(
-                    (Objects.equals(keyType, "access") ? apiKeyConfig.getJwtAccess() : apiKeyConfig.getJwtRefresh()).getBytes()));
+                    (Objects.equals(keyType, "access") ? apiKeyConfig.getJwtAccess() : apiKeyConfig.getJwtRefresh())
+                            .getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
             log.error("Cannot create token", e);
@@ -75,7 +77,8 @@ public class JwtTokenProvider {
         if (redisService.exist(token)) throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
 
         JWSVerifier verifier = new MACVerifier(
-                (Objects.equals(keyType, "access") ? apiKeyConfig.getJwtAccess() : apiKeyConfig.getJwtRefresh()).getBytes());
+                (Objects.equals(keyType, "access") ? apiKeyConfig.getJwtAccess() : apiKeyConfig.getJwtRefresh())
+                        .getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 

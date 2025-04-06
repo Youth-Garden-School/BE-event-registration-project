@@ -52,7 +52,8 @@ public enum ErrorCode {
     API_KEY_JWT_ACCESS_REQUIRED(1257, "JWT Access Signer Key không được để trống", HttpStatus.BAD_REQUEST),
     API_KEY_JWT_REFRESH_REQUIRED(1258, "JWT Refresh Signer Key không được để trống", HttpStatus.BAD_REQUEST),
     API_KEY_JWT_ACCESS_DURATION_REQUIRED(1259, "JWT Access Token Duration không được để trống", HttpStatus.BAD_REQUEST),
-    API_KEY_JWT_REFRESH_DURATION_REQUIRED(1260, "JWT Refresh Token Duration không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_JWT_REFRESH_DURATION_REQUIRED(
+            1260, "JWT Refresh Token Duration không được để trống", HttpStatus.BAD_REQUEST),
     API_KEY_DB_URL_REQUIRED(1261, "Database URL không được để trống", HttpStatus.BAD_REQUEST),
     API_KEY_DB_USERNAME_REQUIRED(1262, "Database Username không được để trống", HttpStatus.BAD_REQUEST),
     API_KEY_DB_PASSWORD_REQUIRED(1263, "Database Password không được để trống", HttpStatus.BAD_REQUEST),
@@ -89,7 +90,10 @@ public enum ErrorCode {
     PAGINATE_INVALID_PAGE_NUMBER(1800, "Số trang phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
     PAGINATE_INVALID_PAGE_SIZE(1801, "Kích thước trang phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
     PAGINATE_INVALID_SORT_DIRECTION(1802, "Hướng sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST),
-    PAGINATE_INVALID_SORT_BY(1803, "Trường sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST);
+    PAGINATE_INVALID_SORT_BY(1803, "Trường sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    // EMAIL ERROR (1500-1599)
+    EMAIL_SENDING_FAILED(1500, "Gửi email thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
 
     int code;
     String message;

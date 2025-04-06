@@ -1,6 +1,6 @@
 plugins {
     id 'java'                                   // Support for Java projects
-    id 'org.springframework.boot' version '3.4.4'  // Spring Boot plugin for application development
+    id 'org.springframework.boot' version '3.2.5'  // Spring Boot plugin for application development
     id 'io.spring.dependency-management' version '1.1.7'  // Dependency version management
     id 'jacoco'                                 // Code coverage reporting
     id 'com.diffplug.spotless' version '6.25.0' // Code formatting and style enforcement
@@ -24,6 +24,8 @@ ext {
     uuidv7Generate = '5.1.0'
     openAPIVersion = '2.6.0'
     dotEnvVersion = '3.0.2'
+    openFeignVersion = '4.0.4'
+    springCloudVersion = '2023.0.0'
 }
 
 configurations {
@@ -36,6 +38,7 @@ repositories {
     mavenCentral()                              // Central repository for dependency resolution
 }
 
+// Add this to your dependencies section if not already present
 dependencies {
     // Spring Boot Starters for core functionality
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -81,6 +84,18 @@ dependencies {
     testImplementation "org.testcontainers:postgresql:${testContainersVersion}"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    
+    // OpenFeign
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${openFeignVersion}"
+    // Add this to your dependencies section if not already present
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+}
+
+// Add Spring Cloud dependency management if not already present
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 // Test task configuration
