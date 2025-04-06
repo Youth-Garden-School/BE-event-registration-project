@@ -1,7 +1,7 @@
 package com.eventregistration.entity;
 
-import com.eventregistration.entity.common.BaseEntity;
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;

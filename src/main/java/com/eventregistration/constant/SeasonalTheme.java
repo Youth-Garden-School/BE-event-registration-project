@@ -1,5 +1,8 @@
 package com.eventregistration.constant;
 
 public enum SeasonalTheme {
-    SPRING, SUMMER, AUTUMN, WINTER
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER
 }

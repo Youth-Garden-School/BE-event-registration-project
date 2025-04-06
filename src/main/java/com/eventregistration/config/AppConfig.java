@@ -9,6 +9,4 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableWebSecurity
 @EnableMethodSecurity
-public class AppConfig {
-
-}
+public class AppConfig {}

@@ -1,14 +1,15 @@
 package com.eventregistration.entity;
 
-import com.eventregistration.constant.AttendeeStatus;
-import com.eventregistration.entity.common.BaseEntity;
 import jakarta.persistence.*;
+
+import com.eventregistration.constant.AttendeeStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "eventAttendees")
+@Table(name = "EventAttendee")
 @Getter
 @Setter
 @SuperBuilder

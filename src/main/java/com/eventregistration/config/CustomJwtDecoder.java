@@ -1,21 +1,23 @@
 package com.eventregistration.config;
 
-import com.eventregistration.service.RedisService;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
+import java.text.ParseException;
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.time.Instant;
+import com.eventregistration.service.RedisService;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
@@ -23,10 +25,6 @@ import java.time.Instant;
 @Slf4j
 public class CustomJwtDecoder implements JwtDecoder {
     RedisService redisService;
-
-    @NonFinal
-    @Value("${jwt.access-signer-key}")
-    private String signerKey;
 
     @Override
     public Jwt decode(String token) throws JwtException {

@@ -1,6 +1,7 @@
 package com.eventregistration.dto.response.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

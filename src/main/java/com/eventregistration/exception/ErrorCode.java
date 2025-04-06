@@ -1,10 +1,11 @@
 package com.eventregistration.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -39,6 +40,29 @@ public enum ErrorCode {
 
     // API ERROR (1200-1299)
     API_LACK_OF_PARAMETER(1200, "API còn thiếu tham số", HttpStatus.BAD_REQUEST),
+
+    // API KEY ERROR (1250-1299)
+    API_KEY_BREVO_REQUIRED(1250, "Brevo API Key không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_PEXELS_REQUIRED(1251, "Pexels API Key không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_TRANSLATE_REQUIRED(1252, "Translate API Key không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_GOOGLE_CLIENT_ID_REQUIRED(1253, "Google Client ID không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_GOOGLE_CLIENT_SECRET_REQUIRED(1254, "Google Client Secret không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_FACEBOOK_CLIENT_ID_REQUIRED(1255, "Facebook Client ID không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_FACEBOOK_CLIENT_SECRET_REQUIRED(1256, "Facebook Client Secret không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_JWT_ACCESS_REQUIRED(1257, "JWT Access Signer Key không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_JWT_REFRESH_REQUIRED(1258, "JWT Refresh Signer Key không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_JWT_ACCESS_DURATION_REQUIRED(1259, "JWT Access Token Duration không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_JWT_REFRESH_DURATION_REQUIRED(1260, "JWT Refresh Token Duration không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_DB_URL_REQUIRED(1261, "Database URL không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_DB_USERNAME_REQUIRED(1262, "Database Username không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_DB_PASSWORD_REQUIRED(1263, "Database Password không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_REDIS_HOST_REQUIRED(1264, "Redis Host không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_REDIS_PORT_REQUIRED(1265, "Redis Port không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_REDIS_PASSWORD_REQUIRED(1266, "Redis Password không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_SENDER_EMAIL_REQUIRED(1267, "Sender Email không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_SENDER_NAME_REQUIRED(1268, "Sender Name không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_FIREBASE_BUCKET_NAME_REQUIRED(1269, "Firebase Bucket Name không được để trống", HttpStatus.BAD_REQUEST),
+    API_KEY_JWT_DURATION_INVALID(1270, "JWT Token Duration phải lớn hơn 0", HttpStatus.BAD_REQUEST),
 
     // ROLE ERROR (1300-1399)
     ROLE_EXISTED(1300, "Vai trò đã tồn tại", HttpStatus.BAD_REQUEST),

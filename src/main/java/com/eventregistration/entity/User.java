@@ -1,17 +1,16 @@
 package com.eventregistration.entity;
 
-import com.eventregistration.entity.common.BaseEntity;
+import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 @Entity
-@Table(name = "User")
+@Table(name = "NewUser")
 @Getter
 @Setter
 @SuperBuilder
@@ -45,5 +44,5 @@ public class User extends BaseEntity {
     List<Calendar> calendars;
 
     @ManyToMany(mappedBy = "users")
-    Set<Role> roles = new HashSet<>();
+    Set<Role> roles;
 }

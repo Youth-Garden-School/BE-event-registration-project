@@ -1,13 +1,13 @@
 package com.eventregistration.entity;
 
-import com.eventregistration.entity.common.BaseEntity;
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "oauthAccounts")
+@Table(name = "OauthAccount")
 @Getter
 @Setter
 @SuperBuilder

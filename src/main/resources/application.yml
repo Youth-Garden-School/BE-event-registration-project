@@ -1,35 +1,110 @@
-
-
-spring:
-  datasource:
-    username: ${DBMS_USERNAME}
-    password: ${DBMS_PASSWORD}
-    url: ${DBMS_CONNECTION}
-    driverClassName: org.postgresql.Driver
-  jpa:
-    show-sql: true
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # camelCase
-      ddl-auto: update
-
 server:
-  port: 8080
   servlet:
     context-path: /api
+    encoding:
+      charset: UTF8
+  port: 8080
+  compression:
+    enabled: true
 
-logging:
-  level:
-    org:
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 3MB
+      max-file-size: 3MB
+  application:
+    name: regista
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://pg-18ea9180-hoangquan-2788.h.aivencloud.com:16384/Regista_dev?sslmode=require}
+    username: ${DB_USERNAME:avnadmin}
+    password: ${DB_PASSWORD:AVNS_elVZScJZUUiAL5V39oA}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
       hibernate:
-        engine:
-          jdbc:
-            spi:
-              SqlExceptionHelper: DEBUG
-      springframework:
-        web: DEBUG
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+          facebook:
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
 
-jwt:
-  signerKey: <secret-key>
-  valid-duration: 000 # in second
-  refreshable-duration: 00 # in second
+springdoc:
+  swagger-ui:
+    path: /api-documentation
+    operations-sorter: method
+    disable-swagger-default-url: true
+
+openapi:
+  service:
+    api-docs: api-service
+    server:
+      local: http://localhost:8080/api
+      dev: https://backend-production-c2cb.up.railway.app/api
+    title: API Service Documentation
+    version: 1.0.0
+
+api-keys:
+  brevo: ${BREVO_APIKEY}
+  pexels: ${PEXELS_APIKEY}
+  translate: ${TRANSLATE_APIKEY}
+  google-client-id: ${GOOGLE_CLIENT_ID}
+  google-client-secret: ${GOOGLE_CLIENT_SECRET}
+  facebook-client-id: ${FACEBOOK_CLIENT_ID}
+  facebook-client-secret: ${FACEBOOK_CLIENT_SECRET}
+  jwt-access: ${JWT_ACCESS_SIGNER_KEY}
+  jwt-refresh: ${JWT_REFRESH_SIGNER_KEY}
+  jwt-access-duration: ${JWT_ACCESS_TOKEN_DURATION:7200}
+  jwt-refresh-duration: ${JWT_REFRESH_TOKEN_DURATION:604800}
+  db-url: ${DB_URL}
+  db-username: ${DB_USERNAME}
+  db-password: ${DB_PASSWORD}
+  redis-host: ${REDIS_HOST}
+  redis-port: ${REDIS_PORT}
+  redis-password: ${REDIS_PASSWORD}
+  sender-email: ${SENDER_EMAIL}
+  sender-name: ${SENDER_NAME}
+  firebase-bucket-name: ${FIREBASE_BUCKET_NAME}
+
+app:
+  email-client:
+    brevo-url: ${BREVO_API_URL:https://api.brevo.com}
+    brevo-apikey: ${BREVO_APIKEY}
+    sender:
+      email: ${SENDER_EMAIL}
+      name: ${SENDER_NAME}
+  dictionary-client:
+    url: ${DICTIONARY_API_URL}
+  pexels-client:
+    url: ${PEXELS_API_URL}
+    apikey: ${PEXELS_APIKEY}
+  translate-client:
+    url: ${TRANSLATE_API_URL}
+    apikey: ${TRANSLATE_APIKEY}
+  firebase:
+    bucket-name: ${FIREBASE_BUCKET_NAME}
+
+client:
+  url: ${CLIENT_URL}
+  reset-password-path: ${RESET_PASSWORD_PATH}
+  verify-email-path: ${VERIFY_EMAIL_PATH}
+

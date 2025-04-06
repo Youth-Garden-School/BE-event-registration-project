@@ -43,15 +43,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Thêm Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "com.fasterxml.uuid:java-uuid-generator:${uuidv7Generate}"
 
     // Database drivers for persistence
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2'
 
+
     // Redis client (tùy chọn, nếu cần cấu hình nâng cao)
-    implementation 'redis.clients:jedis' // Thêm Jedis nếu bạn muốn dùng client cụ thể
+    implementation 'redis.clients:jedis'
 
     // Lombok for reducing boilerplate code
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -78,7 +79,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
     testImplementation "org.testcontainers:postgresql:${testContainersVersion}"
-    testImplementation "org.testcontainers:redis:${testContainersVersion}" // Thêm Testcontainers Redis
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -95,11 +95,11 @@ jacoco {
 }
 
 jacocoTestReport {
-    dependsOn test                              // Ensure tests run first
+    dependsOn test
     reports {
-        xml.required = true                     // Generate XML report
-        html.required = true                    // Generate HTML report
-        csv.required = false                    // Disable CSV report
+        xml.required = true
+        html.required = true
+        csv.required = false
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
@@ -117,24 +117,25 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = 0.8                   // Enforce minimum coverage
+                minimum = 0.8
             }
         }
     }
 }
 
-// Spotless configuration for code formatting
 spotless {
     java {
-        removeUnusedImports()                   // Clean up imports
-        trimTrailingWhitespace()                // Remove trailing whitespace
-        endWithNewline()                        // Ensure file ends with newline
-        indentWithTabs(4)                       // Use tabs for indentation
-        palantirJavaFormat()                    // Apply Palantir formatting
-        importOrder('java', 'jakarta', 'org', 'com', '')  // Define import order
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        indentWithTabs(4)
+        palantirJavaFormat()
+        importOrder('java', 'jakarta', 'org', 'com', '')
     }
 }
 
 tasks.named('build') {
-    dependsOn spotlessApply                    // Apply formatting during build
+    dependsOn spotlessApply
 }
+
+// Flyway configuration removed

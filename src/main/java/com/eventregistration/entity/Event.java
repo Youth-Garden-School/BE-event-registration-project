@@ -1,19 +1,20 @@
 package com.eventregistration.entity;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.*;
+
 import com.eventregistration.constant.EventStyle;
 import com.eventregistration.constant.SeasonalTheme;
 import com.eventregistration.constant.ThemeMode;
-import com.eventregistration.entity.common.BaseAuthor;
-import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Entity
-@Table(name = "events")
+@Table(name = "Event")
 @Getter
 @Setter
 @SuperBuilder
