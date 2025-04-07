@@ -26,35 +26,24 @@ import lombok.experimental.FieldDefaults;
 public class SecurityConfig {
     CustomJwtDecoder customJwtDecoder;
 
+    // Updated to remove the /api prefix since Spring adds it automatically
     private static final String[] PUBLIC_ENDPOINTS = {
-        "/users",
-        "/users/verify",
-        "/users/forgot-password",
-        "/users/reset-password",
-        "/auth/login",
-        "/auth/refresh",
-        "/auth/introspect",
-        "/oauth2/**",
-        "/api-documentation",
-        "/swagger-ui/*",
-        "/v3/api-docs/**",
-        "/swagger-resources/**",
-        "/swagger-resources",
-        "/words/search/**"
+            "/auths/**",
+            "/v3/api-docs/**",  // For Swagger/OpenAPI
+            "/swagger-ui/**",   // For Swagger UI
+            "/api-documentation/**", // For your custom Swagger path
+            "/actuator/**"      // For Spring Boot Actuator if used
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors(cor -> cor.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS)
-                        .permitAll()
-                        .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated());
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated());
         // .oauth2Login(oauth2login -> {
         //     oauth2login.defaultSuccessUrl("/auth/oauth2/login-success", true);
         // });

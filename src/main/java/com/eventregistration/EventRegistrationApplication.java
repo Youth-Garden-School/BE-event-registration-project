@@ -5,15 +5,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @EnableFeignClients
+@Slf4j
 public class EventRegistrationApplication {
 
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.configure().load();
-        System.out.println("Database URL: " + dotenv.get("DB_URL"));
-        System.out.println("REDIS_HOST: " + dotenv.get("REDIS_HOST"));
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+        dotenv.entries().forEach(entry -> {
+            System.setProperty(entry.getKey(), entry.getValue());
+            log.info(null, "{} = {}", entry.getKey(), entry.getValue());
+        });
+
         SpringApplication.run(EventRegistrationApplication.class, args);
     }
 }

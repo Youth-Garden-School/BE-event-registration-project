@@ -29,24 +29,26 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationController {
     AuthenticationService authenticationService;
 
-    @PostMapping("/signup/email")
+    @PostMapping("/sign-in/email")
     @Operation(summary = "Request email signup", description = "Send OTP to user's email for verification")
     public ApiResponse<EmailSignupResponse> requestEmailSignup(@Valid @RequestBody EmailSignupRequest request) {
-        log.info("Received email signup request for: {}", request.getEmail());
+        log.info("Received email signup request for: {}", request.email());
         EmailSignupResponse response = authenticationService.requestEmailSignup(request);
+
         return ApiResponse.<EmailSignupResponse>builder()
                 .message("OTP sent successfully")
                 .result(response)
                 .build();
     }
 
-    @PostMapping("/signup/verify")
+    @PostMapping("/sign-in/verify")
     @Operation(
             summary = "Verify OTP and complete signup",
             description = "Verify the OTP sent to email and create user account")
     public ApiResponse<Void> verifyOtpAndSignup(@Valid @RequestBody VerifyOtpRequest request) {
-        log.info("Received OTP verification for email: {}", request.getEmail());
+        log.info("Received OTP verification for email: {}", request.email());
         authenticationService.verifyOtpAndCreateUser(request);
+
         return ApiResponse.<Void>builder()
                 .message("Email verified and account created successfully")
                 .build();

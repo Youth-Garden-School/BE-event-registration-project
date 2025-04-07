@@ -27,9 +27,9 @@ spring:
     name: regista
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL:jdbc:postgresql://pg-18ea9180-hoangquan-2788.h.aivencloud.com:16384/Regista_dev?sslmode=require}
-    username: ${DB_USERNAME:avnadmin}
-    password: ${DB_PASSWORD:AVNS_elVZScJZUUiAL5V39oA}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -47,6 +47,12 @@ spring:
           facebook:
             client-id: ${FACEBOOK_CLIENT_ID}
             client-secret: ${FACEBOOK_CLIENT_SECRET}
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+    livereload:
+      enabled: true
 
 springdoc:
   swagger-ui:

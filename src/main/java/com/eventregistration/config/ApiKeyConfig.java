@@ -69,8 +69,8 @@ public class ApiKeyConfig {
     @NotBlank(message = "API_KEY_REDIS_HOST_REQUIRED")
     String redisHost;
 
-    @NotBlank(message = "API_KEY_REDIS_PORT_REQUIRED")
-    String redisPort;
+    @NotNull(message = "API_KEY_REDIS_PORT_REQUIRED")
+    int redisPort;
 
     @NotBlank(message = "API_KEY_REDIS_PASSWORD_REQUIRED")
     String redisPassword;

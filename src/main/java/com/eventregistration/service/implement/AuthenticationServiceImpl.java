@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eventregistration.constant.AuthConstants;
 import com.eventregistration.dto.request.EmailSignupRequest;
 import com.eventregistration.dto.request.VerifyOtpRequest;
 import com.eventregistration.dto.response.EmailSignupResponse;
@@ -15,6 +16,7 @@ import com.eventregistration.entity.User;
 import com.eventregistration.entity.UserEmail;
 import com.eventregistration.exception.AppException;
 import com.eventregistration.exception.ErrorCode;
+import com.eventregistration.mapper.AuthenticationMapper;
 import com.eventregistration.repository.UserEmailRepository;
 import com.eventregistration.repository.UserRepository;
 import com.eventregistration.service.AuthenticationService;
@@ -31,17 +33,15 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private static final String OTP_PREFIX = "signup_otp:";
-    private static final int OTP_EXPIRATION_SECONDS = 300; // 5 minutes
-
     UserRepository userRepository;
     UserEmailRepository userEmailRepository;
     EmailService emailService;
     RedisTemplate<String, String> redisTemplate;
+    AuthenticationMapper authenticationMapper;
 
     @Override
     public EmailSignupResponse requestEmailSignup(EmailSignupRequest request) {
-        String email = request.getEmail();
+        String email = request.email();
 
         // Check if email already exists and is verified
         if (userEmailRepository.existsByEmail(email)) {
@@ -52,27 +52,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String otp = generateOtp();
 
         // Store OTP in Redis with expiration
-        String redisKey = OTP_PREFIX + email;
-        redisTemplate.opsForValue().set(redisKey, otp, Duration.ofSeconds(OTP_EXPIRATION_SECONDS));
+        String redisKey = AuthConstants.OTP_PREFIX + email;
+        redisTemplate.opsForValue().set(redisKey, otp, Duration.ofSeconds(AuthConstants.OTP_EXPIRATION_SECONDS));
 
         // Send email with OTP
         emailService.sendOtpEmail(email, otp);
         log.info("OTP email sent to: {}", email);
 
-        return EmailSignupResponse.builder()
-                .email(email)
-                .expiresIn(OTP_EXPIRATION_SECONDS)
-                .build();
+        return new EmailSignupResponse(email, AuthConstants.OTP_EXPIRATION_SECONDS);
     }
 
     @Override
     @Transactional
     public void verifyOtpAndCreateUser(VerifyOtpRequest request) {
-        String email = request.getEmail();
-        String otp = request.getOtp();
+        String email = request.email();
+        String otp = request.otp();
 
         // Get OTP from Redis
-        String redisKey = OTP_PREFIX + email;
+        String redisKey = AuthConstants.OTP_PREFIX + email;
         String storedOtp = redisTemplate.opsForValue().get(redisKey);
 
         // Validate OTP
@@ -89,15 +86,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Create user with verified email
         User user = User.builder().username(generateUsername(email)).build();
-
         User savedUser = userRepository.save(user);
 
-        UserEmail userEmail = UserEmail.builder()
-                .user(savedUser)
-                .email(email)
-                .isPrimary(true)
-                .isVerified(true)
-                .build();
+        // Use mapper to create UserEmail entity
+        UserEmail userEmail = authenticationMapper.toUserEmail(request);
+        userEmail.setUser(savedUser);
 
         userEmailRepository.save(userEmail);
         log.info("User created successfully with email: {}", email);
