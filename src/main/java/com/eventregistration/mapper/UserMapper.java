@@ -21,6 +21,9 @@ public interface UserMapper {
     @Mapping(target = "user", source = "user")
     UserEmail toUserEmail(String email, User user);
 
-    @Mapping(target = "email", expression = "java(user.getEmails().stream().filter(UserEmail::isPrimary).findFirst().map(UserEmail::getEmail).orElse(null))")
+    @Mapping(
+            target = "email",
+            expression =
+                    "java(user.getEmails().stream().filter(UserEmail::isPrimary).findFirst().map(UserEmail::getEmail).orElse(null))")
     UserResponse toUserResponse(User user);
 }

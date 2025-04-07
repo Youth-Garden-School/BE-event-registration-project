@@ -1,6 +1,5 @@
 package com.eventregistration.service.implement;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -37,30 +36,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse createNewUser(String email) {
-    
-        User user = User.builder()
-                .username(generateUsername(email))
-                .build();
-    
+
+        User user = User.builder().username(generateUsername(email)).build();
+
         User persistedUser = userRepository.save(user);
         log.info("User saved: {}", persistedUser);
-    
-        UserEmail userEmail = userEmailRepository.save(
-            UserEmail.builder()
-            .email(email)
-            .user(persistedUser)
-            .isPrimary(true)
-            .isVerified(true)
-            .build());
+
+        UserEmail userEmail = userEmailRepository.save(UserEmail.builder()
+                .email(email)
+                .user(persistedUser)
+                .isPrimary(true)
+                .isVerified(true)
+                .build());
 
         persistedUser.setEmails(Collections.singletonList(userEmail));
         log.info("Emails set on user");
-    
+
         // roleRepository.findByName("ROLE_USER").ifPresent(role -> {
         //     role.getUsers().add(persistedUser); // Cập nhật phía sở hữu
         //     roleRepository.save(role);          // Lưu role để cập nhật mối quan hệ
         // });
-    
+
         return userMapper.toUserResponse(persistedUser);
     }
 

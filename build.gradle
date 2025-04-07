@@ -52,6 +52,7 @@ dependencies {
     // Database drivers for persistence
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2'
+    testImplementation 'com.h2database:h2'
 
 
     // Redis client (tùy chọn, nếu cần cấu hình nâng cao)
@@ -142,7 +143,7 @@ spotless {
 }
 
 tasks.named('build') {
-    // dependsOn spotlessApply
+    dependsOn spotlessApply
 }
 
 // Flyway configuration removed
