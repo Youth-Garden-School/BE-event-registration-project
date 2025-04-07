@@ -29,6 +29,8 @@ public class Event extends BaseAuthor {
     LocalDateTime startTime;
     LocalDateTime endTime;
     String location;
+
+    @Builder.Default
     boolean isOnline = false;
 
     @ManyToOne
@@ -41,6 +43,7 @@ public class Event extends BaseAuthor {
     String eventColor;
     String fontStyle;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     ThemeMode themeMode = ThemeMode.LIGHT;
 
@@ -50,5 +53,6 @@ public class Event extends BaseAuthor {
     @Enumerated(EnumType.STRING)
     SeasonalTheme seasonalTheme;
 
+    @Builder.Default
     boolean requiresApproval = false;
 }

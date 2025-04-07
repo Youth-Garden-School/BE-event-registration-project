@@ -23,6 +23,9 @@ public class UserEmail extends BaseEntity {
     @Column(unique = true)
     String email;
 
+    @Builder.Default
     boolean isPrimary = false;
+    
+    @Builder.Default
     boolean isVerified = false;
 }

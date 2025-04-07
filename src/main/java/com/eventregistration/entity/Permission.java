@@ -24,6 +24,7 @@ public class Permission extends BaseAuthor {
 
     String description;
 
+    @Builder.Default
     @ManyToMany(
             mappedBy = "permissions",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})

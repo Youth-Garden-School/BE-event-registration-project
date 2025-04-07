@@ -28,6 +28,7 @@ public class EventAttendee extends BaseEntity {
 
     String email;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     AttendeeStatus status = AttendeeStatus.PENDING;
 }
