@@ -17,6 +17,6 @@ public class EmailSignupResponse {
     @Schema(description = "Email address where OTP was sent", example = "user@example.com")
     String email;
 
-    @Schema(description = "Expiration time of OTP in seconds", example = "300")
+    @Schema(description = "Expiration time of OTP in seconds", example = "60")
     int expiresIn;
 }

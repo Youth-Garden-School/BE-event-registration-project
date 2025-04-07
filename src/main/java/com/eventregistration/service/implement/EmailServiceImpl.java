@@ -8,6 +8,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.eventregistration.config.ApiKeyConfig;
+import com.eventregistration.constant.AuthConstants;
 import com.eventregistration.exception.AppException;
 import com.eventregistration.exception.ErrorCode;
 import com.eventregistration.repository.httpclient.EmailClient;
@@ -31,9 +32,6 @@ public class EmailServiceImpl implements EmailService {
     EmailClient emailClient;
     ApiKeyConfig apiKeyConfig;
     TemplateEngine templateEngine;
-
-    private static final String OTP_TEMPLATE = "email/otp-verification";
-    private static final int OTP_EXPIRATION_MINUTES = 5;
 
     @Override
     public EmailResponse sendHtmlEmail(
@@ -65,14 +63,19 @@ public class EmailServiceImpl implements EmailService {
 
             RecipientModel recipient = RecipientModel.builder().email(email).build();
 
-            // Prepare template context
             Context context = new Context();
             context.setVariable("otp", otp);
-            context.setVariable("expirationMinutes", OTP_EXPIRATION_MINUTES);
+            context.setVariable("expirationMinutes", AuthConstants.OTP_EXPIRATION_SECONDS / 60);
             context.setVariable("currentYear", Year.now().getValue());
 
-            // Process the template
-            String htmlContent = templateEngine.process(OTP_TEMPLATE, context);
+            // Add logging to debug template processing
+            log.info("Processing template: email/otp-verification");
+            String htmlContent = templateEngine.process("email/otp-verification", context);
+
+            // Log a snippet of the generated HTML to verify content
+            log.info(
+                    "Generated HTML content (first 100 chars): {}",
+                    htmlContent != null ? htmlContent.substring(0, Math.min(100, htmlContent.length())) : "null");
 
             return sendHtmlEmail(sender, List.of(recipient), "Your Verification Code for Regista", htmlContent);
         } catch (Exception e) {

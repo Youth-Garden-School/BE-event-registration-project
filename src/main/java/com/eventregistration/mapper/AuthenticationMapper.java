@@ -2,49 +2,55 @@ package com.eventregistration.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-import com.eventregistration.dto.request.EmailSignupRequest;
-import com.eventregistration.dto.request.VerifyOtpRequest;
-import com.eventregistration.dto.response.EmailSignupResponse;
+import com.eventregistration.dto.response.AuthResponse;
+import com.eventregistration.dto.response.EmailLoginResponse;
+import com.eventregistration.dto.response.UserResponse;
+import com.eventregistration.entity.User;
 import com.eventregistration.entity.UserEmail;
 
-/**
- * Mapper for authentication-related DTOs and entities
- */
 @Mapper(componentModel = "spring")
 public interface AuthenticationMapper {
 
-    AuthenticationMapper INSTANCE = Mappers.getMapper(AuthenticationMapper.class);
+    /**
+     * Convert parameters to EmailLoginResponse
+     *
+     * @param email Email address
+     * @param isNewUser Whether this is a new user
+     * @param hasPassword Whether the user has a password set
+     * @param expirationSeconds OTP expiration time in seconds
+     * @return EmailLoginResponse
+     */
+    EmailLoginResponse toEmailLoginResponse(
+            String email, boolean isNewUser, boolean hasPassword, int expirationSeconds);
 
     /**
-     * Maps UserEmail entity to EmailSignupResponse
+     * Convert User entity to AuthResponse
+     *
+     * @param user User entity
+     * @param accessToken JWT access token
+     * @param refreshToken JWT refresh token
+     * @param isNewUser Whether this is a new user
+     * @return AuthResponse
      */
-    @Mapping(source = "email", target = "email")
-    @Mapping(target = "expiresIn", ignore = true) // This is set in the service
-    EmailSignupResponse toEmailSignupResponse(UserEmail userEmail);
+    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "accessToken", source = "accessToken")
+    @Mapping(target = "refreshToken", source = "refreshToken")
+    @Mapping(target = "isNewUser", source = "isNewUser")
+    AuthResponse toAuthResponse(UserResponse user, String accessToken, String refreshToken, boolean isNewUser);
 
     /**
-     * Maps VerifyOtpRequest to UserEmail entity
+     * Get primary email from User entity
+     *
+     * @param user User entity
+     * @return Primary email address
      */
-    @Mapping(source = "email", target = "email")
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "isPrimary", constant = "true")
-    @Mapping(target = "isVerified", constant = "true")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    UserEmail toUserEmail(VerifyOtpRequest request);
-
-    /**
-     * Maps EmailSignupRequest to UserEmail entity
-     */
-    @Mapping(source = "email", target = "email")
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "isPrimary", constant = "false")
-    @Mapping(target = "isVerified", constant = "false")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    UserEmail toUserEmail(EmailSignupRequest request);
+    default String getPrimaryEmail(User user) {
+        return user.getEmails().stream()
+                .filter(UserEmail::isPrimary)
+                .findFirst()
+                .map(UserEmail::getEmail)
+                .orElse("");
+    }
 }

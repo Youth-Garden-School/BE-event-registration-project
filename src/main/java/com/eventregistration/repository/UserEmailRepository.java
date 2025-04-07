@@ -10,7 +10,6 @@ import com.eventregistration.entity.UserEmail;
 
 @Repository
 public interface UserEmailRepository extends JpaRepository<UserEmail, UUID> {
-
     boolean existsByEmail(String email);
 
     Optional<UserEmail> findByEmail(String email);

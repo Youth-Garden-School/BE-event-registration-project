@@ -32,20 +32,18 @@ public class ApplicationInitConfig {
     static final String ADMIN_EMAIL = "regista.admin@yopmail.com";
 
     @NonFinal
-    static final String ADMIN_PASSWORD = "Admin@123"; // Mật khẩu mặc định
+    static final String ADMIN_PASSWORD = "Admin@123";
 
     @Bean
     ApplicationRunner applicationRunner(
             UserRepository userRepository,
             RoleRepository roleRepository,
-            UserEmailRepository userEmailRepository, // Thêm UserEmailRepository
+            UserEmailRepository userEmailRepository,
             PasswordEncoder passwordEncoder) {
         log.info("Initializing application...");
 
         return args -> {
-            // Kiểm tra xem email admin đã tồn tại chưa
             if (!userEmailRepository.existsByEmail(ADMIN_EMAIL)) {
-                // Tạo role USER nếu chưa tồn tại
                 Role userRole = roleRepository
                         .findByName("ROLE_USER")
                         .orElseGet(() -> roleRepository.save(Role.builder()
@@ -53,7 +51,6 @@ public class ApplicationInitConfig {
                                 .description("Default user role")
                                 .build()));
 
-                // Tạo role ADMIN nếu chưa tồn tại
                 Role adminRole = roleRepository
                         .findByName("ROLE_ADMIN")
                         .orElseGet(() -> roleRepository.save(Role.builder()
@@ -61,7 +58,6 @@ public class ApplicationInitConfig {
                                 .description("Administrator role")
                                 .build()));
 
-                // Tạo user admin
                 Set<Role> roles = new HashSet<>();
                 roles.add(adminRole);
 
@@ -73,7 +69,6 @@ public class ApplicationInitConfig {
                         .roles(roles)
                         .build();
 
-                // Tạo email cho admin
                 UserEmail adminEmail = UserEmail.builder()
                         .user(adminUser)
                         .email(ADMIN_EMAIL)

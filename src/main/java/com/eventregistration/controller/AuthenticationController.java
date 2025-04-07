@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventregistration.dto.ApiResponse;
-import com.eventregistration.dto.request.EmailSignupRequest;
+import com.eventregistration.dto.request.EmailLoginRequest;
+import com.eventregistration.dto.request.PasswordLoginRequest;
 import com.eventregistration.dto.request.VerifyOtpRequest;
-import com.eventregistration.dto.response.EmailSignupResponse;
+import com.eventregistration.dto.response.AuthResponse;
+import com.eventregistration.dto.response.EmailLoginResponse;
 import com.eventregistration.service.AuthenticationService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,28 +31,43 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationController {
     AuthenticationService authenticationService;
 
-    @PostMapping("/sign-in/email")
-    @Operation(summary = "Request email signup", description = "Send OTP to user's email for verification")
-    public ApiResponse<EmailSignupResponse> requestEmailSignup(@Valid @RequestBody EmailSignupRequest request) {
-        log.info("Received email signup request for: {}", request.email());
-        EmailSignupResponse response = authenticationService.requestEmailSignup(request);
+    @PostMapping("/login/email")
+    @Operation(
+            summary = "Request email login",
+            description = "Send OTP to user's email for login or create a new account")
+    public ApiResponse<EmailLoginResponse> requestEmailLogin(@Valid @RequestBody EmailLoginRequest request) {
+        log.info("Received email login request for: {}", request.email());
+        EmailLoginResponse response = authenticationService.requestEmailLogin(request);
 
-        return ApiResponse.<EmailSignupResponse>builder()
-                .message("OTP sent successfully")
+        return ApiResponse.<EmailLoginResponse>builder()
+                .message("Login via Email")
                 .result(response)
                 .build();
     }
 
-    @PostMapping("/sign-in/verify")
+    @PostMapping("/login/verify")
     @Operation(
-            summary = "Verify OTP and complete signup",
-            description = "Verify the OTP sent to email and create user account")
-    public ApiResponse<Void> verifyOtpAndSignup(@Valid @RequestBody VerifyOtpRequest request) {
+            summary = "Verify OTP and login",
+            description = "Verify the OTP sent to email and login or create account")
+    public ApiResponse<AuthResponse> verifyOtpAndLogin(@Valid @RequestBody VerifyOtpRequest request) {
         log.info("Received OTP verification for email: {}", request.email());
-        authenticationService.verifyOtpAndCreateUser(request);
+        AuthResponse response = authenticationService.verifyOtpAndLogin(request);
 
-        return ApiResponse.<Void>builder()
-                .message("Email verified and account created successfully")
+        return ApiResponse.<AuthResponse>builder()
+                .message("Login successful")
+                .result(response)
+                .build();
+    }
+
+    @PostMapping("/login/password")
+    @Operation(summary = "Login with password", description = "Login using email and password")
+    public ApiResponse<AuthResponse> loginWithPassword(@Valid @RequestBody PasswordLoginRequest request) {
+        log.info("Received password login request for: {}", request.email());
+        AuthResponse response = authenticationService.loginWithPassword(request);
+
+        return ApiResponse.<AuthResponse>builder()
+                .message("Login successful")
+                .result(response)
                 .build();
     }
 }

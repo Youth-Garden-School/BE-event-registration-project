@@ -31,12 +31,17 @@ public enum ErrorCode {
     USER_FILE_UPLOAD_FAIL(1011, "Thay đổi ảnh đại diện thất bại", HttpStatus.BAD_REQUEST),
     USER_NEW_PASSWORD_REQUIRED(1012, "Mật khẩu mới không được để trống", HttpStatus.BAD_REQUEST),
     USER_CONFIRM_PASSWORD_REQUIRED(1013, "Xác nhận mật khẩu mới không được để trống", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1014, "Không tìm thấy tài khoản", HttpStatus.NOT_FOUND),
+    PASSWORD_NOT_SET(1015, "Tài khoản chưa thiết lập mật khẩu", HttpStatus.BAD_REQUEST),
 
     // TOKEN ERROR (1100-1199)
     TOKEN_EMPTY(1100, "Token rỗng", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(1101, "Token giải mã không chính xác", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1102, "Token đã hết hạn", HttpStatus.BAD_REQUEST),
     TOKEN_WAS_LOGOUT(1103, "Token đã đăng xuất, vui lòng đăng nhập lại", HttpStatus.BAD_REQUEST),
+    OTP_EMPTY(1104, "Mã OTP không được để trống", HttpStatus.BAD_REQUEST),
+    OTP_EXPIRED(1104, "Mã OTP đã hết hạn", HttpStatus.BAD_REQUEST),
+    OTP_INVALID(1105, "Mã OTP không chính xác", HttpStatus.BAD_REQUEST),
 
     // API ERROR (1200-1299)
     API_LACK_OF_PARAMETER(1200, "API còn thiếu tham số", HttpStatus.BAD_REQUEST),
@@ -73,6 +78,9 @@ public enum ErrorCode {
     // FILE ERROR (1400-1499)
     FILE_EMPTY(1400, "File rỗng", HttpStatus.BAD_REQUEST),
 
+    // EMAIL ERROR (1500-1599)
+    EMAIL_SENDING_FAILED(1500, "Gửi email thất bại", HttpStatus.INTERNAL_SERVER_ERROR),
+
     // OAUTH2 ERROR (1600-1699)
     OAUTH2_USER_EXISTED_WITH_DIFFERENT_PROVIDER(
             1600, "Tài khoản đã được liên kết với nhà cung cấp OAuth2 khác trước đó", HttpStatus.BAD_REQUEST),
@@ -90,10 +98,7 @@ public enum ErrorCode {
     PAGINATE_INVALID_PAGE_NUMBER(1800, "Số trang phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
     PAGINATE_INVALID_PAGE_SIZE(1801, "Kích thước trang phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
     PAGINATE_INVALID_SORT_DIRECTION(1802, "Hướng sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST),
-    PAGINATE_INVALID_SORT_BY(1803, "Trường sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST),
-
-    // EMAIL ERROR (1500-1599)
-    EMAIL_SENDING_FAILED(1500, "Gửi email thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
+    PAGINATE_INVALID_SORT_BY(1803, "Trường sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST);
 
     int code;
     String message;
