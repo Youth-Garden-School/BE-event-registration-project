@@ -1,23 +1,25 @@
-name: WordWaves Backend Pipeline
+name: Event Registration Backend Pipeline
 
 on:
   push:
     branches:
       - main
     paths:
-      - src/main/java/com/server/wordwaves/**
+      - src/main/java/com/eventregistration/**
       - Dockerfile
+      - build.gradle
   pull_request:
     branches:
       - main
     paths:
-      - src/main/java/com/server/wordwaves/**
+      - src/main/java/com/eventregistration/**
       - Dockerfile
+      - build.gradle
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build and Deploy
+    name: Build and Test
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,14 +30,20 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
 
-      - name: Make mvnw executable
-        run: chmod +x ./mvnw
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - name: Build with Maven
-        run: ./mvnw clean package -DskipTests
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Run tests with test profile
+        run: ./gradlew test -Dspring.profiles.active=test
 
       - name: Build Docker image
-        run: docker build -t quan0204/wordwaves-server:latest .
+        run: docker build -t kaitoudicode/event-registration:latest .
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -44,6 +52,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Push Docker image to Docker Hub
-        run: docker push quan0204/wordwaves-server:latest
+        run: docker push kaitoudicode/event-registration:latest
 
 
