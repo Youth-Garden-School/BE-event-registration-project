@@ -17,4 +17,5 @@ WORKDIR /app
 # Copy JAR file from build stage
 COPY --from=build /app/build/libs/*.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run with production profile
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
