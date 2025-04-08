@@ -12,5 +12,4 @@ public record UserResponse(
         String lastName,
         String email,
         String avatarUrl,
-        String bio,
-        Set<Role> roles) {}
+        String bio) {}

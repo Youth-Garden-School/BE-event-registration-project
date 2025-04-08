@@ -49,6 +49,13 @@ spring:
     livereload:
       enabled: true
 
+logging:
+  level:
+    root: WARN                # Mức log mặc định cho toàn hệ thống là WARN
+    org.springframework: ERROR # Chỉ hiển thị lỗi từ Spring
+    org.hibernate: ERROR      # Chỉ hiển thị lỗi từ Hibernate
+    com.eventregistration: INFO
+
 springdoc:
   swagger-ui:
     path: /api-documentation

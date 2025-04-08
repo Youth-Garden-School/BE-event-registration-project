@@ -19,6 +19,7 @@ import com.eventregistration.entity.UserEmail;
 import com.eventregistration.exception.AppException;
 import com.eventregistration.exception.ErrorCode;
 import com.eventregistration.mapper.AuthenticationMapper;
+import com.eventregistration.mapper.UserMapper;
 import com.eventregistration.repository.UserEmailRepository;
 import com.eventregistration.repository.UserRepository;
 import com.eventregistration.service.AuthenticationService;
@@ -46,6 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserService userService;
     AuthenticationMapper authenticationMapper;
     UserRepository userRepository;
+    UserMapper userMapper;
 
     @Override
     public EmailLoginResponse requestEmailLogin(EmailLoginRequest request) {
@@ -79,6 +81,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthResponse verifyOtpAndLogin(VerifyOtpRequest request) {
+        log.info("Verifying OTP for email: {}", request.email());
 
         String email = request.email().toLowerCase().trim();
         String otp = request.otp();
@@ -91,40 +94,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AppException(ErrorCode.OTP_EXPIRED);
         }
 
-        // Ensure stored OTP is a String and compare
-        String storedOtp = storedOtpObj.toString(); // Hoặc redisService.get() trả về String trực tiếp
+        String storedOtp = storedOtpObj.toString();
         if (!storedOtp.equals(otp)) {
             throw new AppException(ErrorCode.OTP_INVALID);
         }
 
-        // Delete OTP after verification
         redisService.delete(redisKey);
 
         User user;
+        UserResponse userResponse;
         boolean isNewUser = false;
         Optional<UserEmail> userEmailOpt = userEmailRepository.findByEmail(email);
-        UserResponse userResponse = null;
 
         if (userEmailOpt.isPresent()) {
             UserEmail userEmail = userEmailOpt.get();
             userEmail.setVerified(true);
             userEmailRepository.save(userEmail);
             user = userEmail.getUser();
+            userResponse = userMapper.toUserResponse(user);
         } else {
             isNewUser = true;
             userResponse = userService.createNewUser(email);
+            user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         }
 
         // Generate tokens
-        // String accessToken = jwtService.generateAccessToken(user);
-        // String refreshToken = jwtService.generateRefreshToken(user);
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        // Update and persist refresh token
-        // user.setRefreshToken(refreshToken);
-        // userRepository.save(user); // Đảm bảo lưu vào DB
+        // Update refresh token
+        user.setRefreshToken(refreshToken);
+        // Không cần save riêng vì @Transactional sẽ flush
+        // userRepository.save(user);
 
-        // Return response
-        return authenticationMapper.toAuthResponse(userResponse, "accessToken", "refreshToken", isNewUser);
+        return authenticationMapper.toAuthResponse(userResponse, accessToken, refreshToken, isNewUser);
     }
 
     @Override

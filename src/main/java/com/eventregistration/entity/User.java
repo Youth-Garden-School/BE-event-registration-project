@@ -38,6 +38,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<OAuthAccount> oauthAccounts;
 
+    @Column(columnDefinition = "TEXT") // Sử dụng kiểu TEXT
     String refreshToken;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

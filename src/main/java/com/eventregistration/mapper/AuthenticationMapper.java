@@ -9,7 +9,8 @@ import com.eventregistration.dto.response.UserResponse;
 import com.eventregistration.entity.User;
 import com.eventregistration.entity.UserEmail;
 
-@Mapper(componentModel = "spring")
+// @Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {})
 public interface AuthenticationMapper {
 
     /**
@@ -38,6 +39,7 @@ public interface AuthenticationMapper {
     @Mapping(target = "accessToken", source = "accessToken")
     @Mapping(target = "refreshToken", source = "refreshToken")
     @Mapping(target = "isNewUser", source = "isNewUser")
+    @Mapping(target = "user", source = "user")  // Add this line to map the user object
     AuthResponse toAuthResponse(UserResponse user, String accessToken, String refreshToken, boolean isNewUser);
 
     /**

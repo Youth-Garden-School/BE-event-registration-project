@@ -1,6 +1,8 @@
 package com.eventregistration.service.implement;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -36,9 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse createNewUser(String email) {
-
         User user = User.builder().username(generateUsername(email)).build();
-
         User persistedUser = userRepository.save(user);
         log.info("User saved: {}", persistedUser);
 
@@ -49,13 +49,17 @@ public class UserServiceImpl implements UserService {
                 .isVerified(true)
                 .build());
 
-        persistedUser.setEmails(Collections.singletonList(userEmail));
+        persistedUser.setEmails(new ArrayList<>(Collections.singletonList(userEmail))); // Sửa ở đây
         log.info("Emails set on user");
 
-        // roleRepository.findByName("ROLE_USER").ifPresent(role -> {
-        //     role.getUsers().add(persistedUser); // Cập nhật phía sở hữu
-        //     roleRepository.save(role);          // Lưu role để cập nhật mối quan hệ
-        // });
+        roleRepository.findByName("ROLE_USER").ifPresent(role -> {
+            role.getUsers().add(persistedUser);
+            if (persistedUser.getRoles() == null) {
+                persistedUser.setRoles(new HashSet<>());
+            }
+            persistedUser.getRoles().add(role);
+            log.info("Role set on user");
+        });
 
         return userMapper.toUserResponse(persistedUser);
     }

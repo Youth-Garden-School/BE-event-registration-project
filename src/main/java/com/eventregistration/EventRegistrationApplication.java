@@ -19,7 +19,6 @@ public class EventRegistrationApplication {
                 Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
                 dotenv.entries().forEach(entry -> {
                     System.setProperty(entry.getKey(), entry.getValue());
-                    log.info("{} = {}", entry.getKey(), entry.getValue());
                 });
             } catch (Exception e) {
                 log.warn("Could not load .env file, continuing with system environment variables");
