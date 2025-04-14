@@ -1,6 +1,7 @@
 package com.eventregistration.service;
 
 import java.text.ParseException;
+import java.util.Map;
 
 import com.eventregistration.entity.User;
 import com.nimbusds.jose.JOSEException;
@@ -24,6 +25,16 @@ public interface JwtService {
     String generateRefreshToken(User user);
 
     /**
+     * Generate JWT reset password token
+     *
+     * @param userId User ID
+     * @param email User email
+     * @param additionalClaims Additional claims to include in the token
+     * @return JWT reset password token
+     */
+    String generateResetPasswordToken(String userId, String email, Map<String, Object> additionalClaims);
+
+    /**
      * Verify JWT access token
      *
      * @param token JWT access token to verify
@@ -42,4 +53,14 @@ public interface JwtService {
      * @throws JOSEException If token verification fails
      */
     SignedJWT verifyRefreshToken(String token) throws ParseException, JOSEException;
+
+    /**
+     * Verify JWT reset password token
+     *
+     * @param token JWT reset password token to verify
+     * @return Verified SignedJWT object
+     * @throws ParseException If token cannot be parsed
+     * @throws JOSEException If token verification fails
+     */
+    SignedJWT verifyResetPasswordToken(String token) throws ParseException, JOSEException;
 }

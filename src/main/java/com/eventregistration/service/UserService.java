@@ -1,5 +1,6 @@
 package com.eventregistration.service;
 
+import com.eventregistration.dto.request.ResetPasswordRequest;
 import com.eventregistration.dto.request.UpdateUserRequest;
 import com.eventregistration.dto.response.UserResponse;
 
@@ -43,4 +44,14 @@ public interface UserService {
      * @param email User's email
      */
     void deleteUser(String email);
+
+    /**
+     * Request password reset by sending email with reset link
+     *
+     * @param email User's email address
+     * @param callbackUrl Optional callback URL for the reset link
+     */
+    void requestPasswordReset(String email, String callbackUrl);
+
+    void resetPassword(ResetPasswordRequest request);
 }

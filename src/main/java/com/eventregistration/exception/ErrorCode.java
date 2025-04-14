@@ -39,6 +39,7 @@ public enum ErrorCode {
     TOKEN_INVALID(1101, "Token giải mã không chính xác", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1102, "Token đã hết hạn", HttpStatus.BAD_REQUEST),
     TOKEN_WAS_LOGOUT(1103, "Token đã đăng xuất, vui lòng đăng nhập lại", HttpStatus.BAD_REQUEST),
+    TOKEN_GENERATION_FAILED(1106, "Không thể tạo token", HttpStatus.INTERNAL_SERVER_ERROR),
     OTP_EMPTY(1104, "Mã OTP không được để trống", HttpStatus.BAD_REQUEST),
     OTP_EXPIRED(1104, "Mã OTP đã hết hạn", HttpStatus.BAD_REQUEST),
     OTP_INVALID(1105, "Mã OTP không chính xác", HttpStatus.BAD_REQUEST),

@@ -81,8 +81,10 @@ api-keys:
   facebook-client-secret: ${FACEBOOK_CLIENT_SECRET}
   jwt-access: ${JWT_ACCESS_SIGNER_KEY}
   jwt-refresh: ${JWT_REFRESH_SIGNER_KEY}
+  jwt-reset-password: ${JWT_RESET_PASSWORD_SIGNER_KEY}
   jwt-access-duration: ${JWT_ACCESS_TOKEN_DURATION:7200}
   jwt-refresh-duration: ${JWT_REFRESH_TOKEN_DURATION:604800}
+  jwt-reset-password-duration: ${JWT_RESET_PASSWORD_TOKEN_DURATION:3600}
   db-url: ${DB_URL}
   db-username: ${DB_USERNAME}
   db-password: ${DB_PASSWORD}
@@ -113,6 +115,4 @@ app:
 
 client:
   url: ${CLIENT_URL}
-  reset-password-path: ${RESET_PASSWORD_PATH}
-  verify-email-path: ${VERIFY_EMAIL_PATH}
 

@@ -131,32 +131,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public AuthResponse loginWithPassword(PasswordLoginRequest request) {
-        return null;
-        // String email = request.email().toLowerCase();
+        String email = request.email().toLowerCase().trim();
 
-        // // Find user by email using UserService
-        // User user = userService.findByEmail(email);
+        // Find user by email
+        UserEmail userEmail =
+                userEmailRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // // Check if user has password
-        // if (user.getPassword() == null || user.getPassword().isEmpty()) {
-        //     throw new AppException(ErrorCode.PASSWORD_NOT_SET);
-        // }
+        User user = userEmail.getUser();
 
-        // // Verify password
-        // if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-        //     throw new AppException(ErrorCode.USER_WRONG_PASSWORD);
-        // }
+        // Check if user has password
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_SET);
+        }
 
-        // // Generate tokens
-        // String accessToken = jwtService.generateAccessToken(user);
-        // String refreshToken = jwtService.generateRefreshToken(user);
+        // Verify password
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new AppException(ErrorCode.USER_WRONG_PASSWORD);
+        }
 
-        // // Update refresh token in user entity
-        // user.setRefreshToken(refreshToken);
+        // Generate tokens
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        // // Use mapper to create response
-        // return authenticationMapper.toAuthResponse(user, accessToken, refreshToken, false);
+        // Update refresh token in user entity
+        user.setRefreshToken(refreshToken);
+        // Không cần save riêng vì @Transactional sẽ flush
+        // userRepository.save(user);
+
+        // Map user to response
+        UserResponse userResponse = userMapper.toUserResponse(user);
+
+        // Return authentication response
+        return authenticationMapper.toAuthResponse(userResponse, accessToken, refreshToken, false);
     }
 
     private String generateOtp() {

@@ -1,0 +1,16 @@
+package com.eventregistration.dto.request;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record RequestPasswordResetRequest(
+        @NotBlank(message = "USER_EMAIL_REQUIRED")
+                @Email(message = "USER_INVALID_EMAIL")
+                @Schema(description = "User's email address", example = "user@example.com")
+                String email,
+        @Schema(
+                        description = "Callback URL for password reset (optional)",
+                        example = "https://myapp.com/reset-password")
+                String callbackUrl) {}

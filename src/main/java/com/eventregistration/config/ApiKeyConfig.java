@@ -47,6 +47,9 @@ public class ApiKeyConfig {
     @NotBlank(message = "API_KEY_JWT_REFRESH_REQUIRED")
     String jwtRefresh;
 
+    @NotBlank(message = "API_KEY_JWT_RESET_PASSWORD_REQUIRED")
+    String jwtResetPassword;
+
     @NotNull(message = "API_KEY_JWT_ACCESS_DURATION_REQUIRED")
     @Min(value = 1, message = "API_KEY_JWT_DURATION_INVALID")
     long jwtAccessDuration;
@@ -54,6 +57,10 @@ public class ApiKeyConfig {
     @NotNull(message = "API_KEY_JWT_REFRESH_DURATION_REQUIRED")
     @Min(value = 1, message = "API_KEY_JWT_DURATION_INVALID")
     long jwtRefreshDuration;
+
+    @NotNull(message = "API_KEY_JWT_RESET_PASSWORD_DURATION_REQUIRED")
+    @Min(value = 1, message = "API_KEY_JWT_DURATION_INVALID")
+    long jwtResetPasswordDuration;
 
     // PostgreSQL
     @NotBlank(message = "API_KEY_DB_URL_REQUIRED")

@@ -27,4 +27,7 @@ public interface EmailService {
      * @return Email response from the email service provider
      */
     EmailResponse sendOtpEmail(String email, String otp);
+
+    // Add this method to your EmailService interface
+    EmailResponse sendResetPasswordEmail(String email, String resetLink, String userName, long expirationMinutes);
 }
