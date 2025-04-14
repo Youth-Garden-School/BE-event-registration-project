@@ -1,5 +1,6 @@
 package com.eventregistration.service;
 
+import com.eventregistration.dto.request.UpdateUserRequest;
 import com.eventregistration.dto.response.UserResponse;
 
 public interface UserService {
@@ -18,4 +19,28 @@ public interface UserService {
      * @return The User entity if found
      */
     UserResponse findByEmail(String email);
+
+    /**
+     * Get current user information
+     *
+     * @param email The email of current user
+     * @return Current user information
+     */
+    UserResponse getCurrentUser(String email);
+
+    /**
+     * Update user profile
+     *
+     * @param email User's email
+     * @param request Update request containing new information
+     * @return Updated user information
+     */
+    UserResponse updateUser(String email, UpdateUserRequest request);
+
+    /**
+     * Delete user account
+     *
+     * @param email User's email
+     */
+    void deleteUser(String email);
 }

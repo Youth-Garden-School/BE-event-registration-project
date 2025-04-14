@@ -25,7 +25,7 @@ public class UserEmail extends BaseEntity {
 
     @Builder.Default
     boolean isPrimary = false;
-    
+
     @Builder.Default
     boolean isVerified = false;
 }

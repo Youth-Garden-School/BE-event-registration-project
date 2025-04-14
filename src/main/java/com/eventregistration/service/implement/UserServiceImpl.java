@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eventregistration.dto.request.UpdateUserRequest;
 import com.eventregistration.dto.response.UserResponse;
 import com.eventregistration.entity.User;
 import com.eventregistration.entity.UserEmail;
@@ -70,6 +71,32 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @Override
+    @Transactional
+    public UserResponse updateUser(String email, UpdateUserRequest request) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // Update only non-null fields
+        if (request.firstName() != null) user.setFirstName(request.firstName());
+        if (request.lastName() != null) user.setLastName(request.lastName());
+        if (request.bio() != null) user.setBio(request.bio());
+        if (request.avatarUrl() != null) user.setAvatarUrl(request.avatarUrl());
+
+        User updatedUser = userRepository.save(user);
+        return userMapper.toUserResponse(updatedUser);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // Remove user from roles to maintain referential integrity
+        user.getRoles().forEach(role -> role.getUsers().remove(user));
+
+        userRepository.delete(user);
+    }
+
     private String generateUsername(String email) {
         // Generate username from email (e.g., john.doe@example.com -> john.doe)
         String username = email.substring(0, email.indexOf('@'));
@@ -81,5 +108,11 @@ public class UserServiceImpl implements UserService {
         }
 
         return username;
+    }
+
+    @Override
+    public UserResponse getCurrentUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toUserResponse(user);
     }
 }

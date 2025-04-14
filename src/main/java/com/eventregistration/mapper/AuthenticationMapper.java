@@ -10,7 +10,9 @@ import com.eventregistration.entity.User;
 import com.eventregistration.entity.UserEmail;
 
 // @Mapper(componentModel = "spring")
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(
+        componentModel = "spring",
+        uses = {})
 public interface AuthenticationMapper {
 
     /**
@@ -28,18 +30,18 @@ public interface AuthenticationMapper {
     /**
      * Convert User entity to AuthResponse
      *
-     * @param user User entity
-     * @param accessToken JWT access token
-     * @param refreshToken JWT refresh token
-     * @param isNewUser Whether this is a new user
-     * @return AuthResponse
+     * @param user UserResponse object containing user details
+     * @param accessToken JWT access token for authentication
+     * @param refreshToken JWT refresh token for obtaining new access tokens
+     * @param isNewUser Whether this is a new user registration
+     * @return AuthResponse containing user details and tokens
      */
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "username", source = "user.username")
     @Mapping(target = "accessToken", source = "accessToken")
     @Mapping(target = "refreshToken", source = "refreshToken")
     @Mapping(target = "isNewUser", source = "isNewUser")
-    @Mapping(target = "user", source = "user")  // Add this line to map the user object
+    @Mapping(target = "user", source = "user")
     AuthResponse toAuthResponse(UserResponse user, String accessToken, String refreshToken, boolean isNewUser);
 
     /**

@@ -115,8 +115,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } else {
             isNewUser = true;
             userResponse = userService.createNewUser(email);
-            user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+            user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         }
 
         // Generate tokens

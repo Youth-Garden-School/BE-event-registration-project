@@ -12,7 +12,7 @@ public class EventRegistrationApplication {
 
     public static void main(String[] args) {
         String activeProfile = System.getProperty("spring.profiles.active");
-        
+
         // Only load .env file if not in production
         if (!"prod".equals(activeProfile)) {
             try {
