@@ -32,7 +32,8 @@ public enum ErrorCode {
     USER_NEW_PASSWORD_REQUIRED(1012, "Mật khẩu mới không được để trống", HttpStatus.BAD_REQUEST),
     USER_CONFIRM_PASSWORD_REQUIRED(1013, "Xác nhận mật khẩu mới không được để trống", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1014, "Không tìm thấy tài khoản", HttpStatus.NOT_FOUND),
-    PASSWORD_NOT_SET(1015, "Tài khoản chưa thiết lập mật khẩu", HttpStatus.BAD_REQUEST),
+    USER_PASSWORD_NOT_SET(1015, "Tài khoản chưa thiết lập mật khẩu", HttpStatus.BAD_REQUEST),
+    USER_USERNAME_GENERATION_FAILED(1016, "Không thể tạo tên tài khoản", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // TOKEN ERROR (1100-1199)
     TOKEN_EMPTY(1100, "Token rỗng", HttpStatus.BAD_REQUEST),

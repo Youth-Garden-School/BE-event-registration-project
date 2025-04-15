@@ -24,26 +24,26 @@ public interface UserService {
     /**
      * Get current user information
      *
-     * @param email The email of current user
+     * @param username The username of current user
      * @return Current user information
      */
-    UserResponse getCurrentUser(String email);
+    UserResponse getCurrentUser(String username);
 
     /**
      * Update user profile
      *
-     * @param email User's email
+     * @param username User's username
      * @param request Update request containing new information
      * @return Updated user information
      */
-    UserResponse updateUser(String email, UpdateUserRequest request);
+    UserResponse updateUser(String username, UpdateUserRequest request);
 
     /**
      * Delete user account
      *
-     * @param email User's email
+     * @param username User's username
      */
-    void deleteUser(String email);
+    void deleteUser(String username);
 
     /**
      * Request password reset by sending email with reset link

@@ -48,6 +48,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "com.fasterxml.uuid:java-uuid-generator:${uuidv7Generate}"
+    implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework:spring-aspects'
 
     // Database drivers for persistence
     runtimeOnly 'org.postgresql:postgresql'

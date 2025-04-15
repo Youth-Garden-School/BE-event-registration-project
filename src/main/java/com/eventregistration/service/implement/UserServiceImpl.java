@@ -7,8 +7,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse createNewUser(String email) {
-        User user = User.builder().username(generateUsername(email)).build();
+        User user = User.builder().username(generateUsername()).build();
         User persistedUser = userRepository.save(user);
         log.info("User saved: {}", persistedUser);
 
@@ -91,10 +94,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse updateUser(String email, UpdateUserRequest request) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse updateUser(String username, UpdateUserRequest request) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // Update only non-null fields
         if (request.firstName() != null) user.setFirstName(request.firstName());
         if (request.lastName() != null) user.setLastName(request.lastName());
         if (request.bio() != null) user.setBio(request.bio());
@@ -106,8 +108,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         // Remove user from roles to maintain referential integrity
         user.getRoles().forEach(role -> role.getUsers().remove(user));
@@ -115,22 +117,30 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    private String generateUsername(String email) {
-        // Generate username from email (e.g., john.doe@example.com -> john.doe)
-        String username = email.substring(0, email.indexOf('@'));
+    @Retryable(
+            value = {AppException.class},
+            maxAttempts = 10,
+            backoff = @Backoff(delay = 1000))
+    private String generateUsername() {
+        String[] prefixes = {"Sunny", "Happy", "Cool", "Star", "Blue", "Swift", "Bright", "Lucky"};
+        String[] suffixes = {"Wolf", "Star", "Fox", "Sky", "Cloud", "Breeze", "Moon", "River"};
+        Random random = new Random();
 
-        // Check if username exists
+        String username = String.format(
+                "%s%s%d",
+                prefixes[random.nextInt(prefixes.length)],
+                suffixes[random.nextInt(suffixes.length)],
+                100 + random.nextInt(900));
         if (userRepository.existsByUsername(username)) {
-            // Append random number
-            username = username + UUID.randomUUID().toString().substring(0, 4);
+            throw new AppException(ErrorCode.USER_USERNAME_GENERATION_FAILED, "Unable to generate unique username");
         }
 
         return username;
     }
 
     @Override
-    public UserResponse getCurrentUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse getCurrentUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
 

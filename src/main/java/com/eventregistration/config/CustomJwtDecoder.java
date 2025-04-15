@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 
+import com.eventregistration.exception.AppException;
+import com.eventregistration.exception.ErrorCode;
 import com.eventregistration.service.RedisService;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -28,7 +30,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) throws JwtException {
         boolean checkedToken = redisService.exist(token);
 
-        if (checkedToken) throw new JwtException("Invalid Token");
+        if (checkedToken) throw new AppException(ErrorCode.TOKEN_WAS_LOGOUT);
 
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
@@ -42,12 +44,12 @@ public class CustomJwtDecoder implements JwtDecoder {
             Instant expiryTime = jwt.getExpiresAt();
 
             if (expiryTime != null && expiryTime.isBefore(Instant.now())) {
-                throw new JwtException("Token has expired");
+                throw new AppException(ErrorCode.TOKEN_EXPIRED);
             }
 
             return jwt;
         } catch (ParseException e) {
-            throw new JwtException("Invalid token");
+            throw new AppException(ErrorCode.TOKEN_INVALID);
         }
     }
 }

@@ -19,12 +19,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig {
     CustomJwtDecoder customJwtDecoder;
+    CustomJwtAuthenticationConverter customJwtAuthenticationConverter;
 
     // Updated to remove the /api prefix since Spring adds it automatically
     private static final String[] PUBLIC_ENDPOINTS = {
@@ -53,7 +56,7 @@ public class SecurityConfig {
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(customJwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .jwtAuthenticationConverter(customJwtAuthenticationConverter))
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 

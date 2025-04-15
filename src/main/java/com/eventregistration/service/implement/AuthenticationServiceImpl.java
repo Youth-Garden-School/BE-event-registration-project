@@ -125,7 +125,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Update refresh token
         user.setRefreshToken(refreshToken);
         // Không cần save riêng vì @Transactional sẽ flush
-        // userRepository.save(user);
+        userRepository.save(user);
 
         return authenticationMapper.toAuthResponse(userResponse, accessToken, refreshToken, isNewUser);
     }
@@ -143,7 +143,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Check if user has password
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
-            throw new AppException(ErrorCode.PASSWORD_NOT_SET);
+            throw new AppException(ErrorCode.USER_PASSWORD_NOT_SET);
         }
 
         // Verify password
