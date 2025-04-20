@@ -100,7 +100,26 @@ public enum ErrorCode {
     PAGINATE_INVALID_PAGE_NUMBER(1800, "Số trang phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
     PAGINATE_INVALID_PAGE_SIZE(1801, "Kích thước trang phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
     PAGINATE_INVALID_SORT_DIRECTION(1802, "Hướng sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST),
-    PAGINATE_INVALID_SORT_BY(1803, "Trường sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST);
+    PAGINATE_INVALID_SORT_BY(1803, "Trường sắp xếp không hợp lệ", HttpStatus.BAD_REQUEST),
+    
+    // CALENDAR ERROR (1900-1999)
+    CALENDAR_NOT_FOUND(1900, "Lịch không tồn tại", HttpStatus.NOT_FOUND),
+    CALENDAR_NAME_REQUIRED(1901, "Tên lịch không được để trống", HttpStatus.BAD_REQUEST),
+    CALENDAR_ALREADY_EXISTS(1902, "Lịch với tên này đã tồn tại", HttpStatus.BAD_REQUEST),
+    CALENDAR_UNAUTHORIZED_ACCESS(1903, "Bạn không có quyền truy cập lịch này", HttpStatus.FORBIDDEN),
+    
+    // EVENT ERROR (2000-2099)
+    EVENT_NOT_FOUND(2000, "Sự kiện không tồn tại", HttpStatus.NOT_FOUND),
+    EVENT_TITLE_REQUIRED(2001, "Tiêu đề sự kiện không được để trống", HttpStatus.BAD_REQUEST),
+    EVENT_START_TIME_REQUIRED(2002, "Thời gian bắt đầu không được để trống", HttpStatus.BAD_REQUEST),
+    EVENT_END_TIME_REQUIRED(2003, "Thời gian kết thúc không được để trống", HttpStatus.BAD_REQUEST),
+    EVENT_INVALID_TIME_RANGE(2004, "Thời gian kết thúc phải sau thời gian bắt đầu", HttpStatus.BAD_REQUEST),
+    EVENT_UNAUTHORIZED_ACCESS(2005, "Bạn không có quyền truy cập sự kiện này", HttpStatus.FORBIDDEN),
+
+
+
+
+    ;
 
     int code;
     String message;

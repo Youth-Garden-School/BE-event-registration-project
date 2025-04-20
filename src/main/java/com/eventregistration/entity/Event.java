@@ -34,7 +34,7 @@ public class Event extends BaseAuthor {
     boolean isOnline = false;
 
     @ManyToOne
-    @JoinColumn(name = "CalendarId", nullable = false)
+    @JoinColumn(name = "CalendarId", nullable = true)
     Calendar calendar;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)

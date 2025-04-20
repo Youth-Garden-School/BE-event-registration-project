@@ -16,10 +16,10 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-public class OpenAPIConfig {
+class OpenAPIConfig {
 
     @Bean
-    public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
+    GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
         return GroupedOpenApi.builder()
                 .group(apiDocs) // /v3/api-docs/api-service
                 .packagesToScan("com.server.wordwaves.controller")
@@ -28,7 +28,7 @@ public class OpenAPIConfig {
 
     @Bean
     // cấu hình group cho microservice
-    public OpenAPI openAPI(
+    OpenAPI openAPI(
             @Value("${openapi.service.title}") String title,
             @Value("${openapi.service.version}") String version,
             @Value("${openapi.service.server.local}") String localUrl,

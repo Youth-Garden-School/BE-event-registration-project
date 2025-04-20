@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class JpaConfig {
 
     @Bean
-    public AuditorAware<String> auditorAware() {
+    AuditorAware<String> auditorAware() {
         return () -> {
             String username = SecurityContextHolder.getContext().getAuthentication() != null
                     ? SecurityContextHolder.getContext().getAuthentication().getName()
