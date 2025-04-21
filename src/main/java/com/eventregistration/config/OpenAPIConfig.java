@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -38,16 +39,38 @@ public class OpenAPIConfig {
                         new Server().url(devUrl).description("Development Server")))
                 .info(new Info()
                         .title(title)
-                        .description("Event Registration System API Documentation")
+                        .description("Event Registration System API Documentation - Comprehensive API for managing events, registrations, calendars, and users")
                         .version(version)
-                        .license(new License().name("Apache 2.0").url("https://springdoc.org")))
+                        .contact(new Contact()
+                                .name("Event Registration Team")
+                                .email("support@eventregistration.com")
+                                .url("https://eventregistration.com"))
+                        .termsOfService("https://eventregistration.com/terms")
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("https://www.apache.org/licenses/LICENSE-2.0")))
                 .components(new Components()
                         .addSecuritySchemes(
                                 "bearerAuth",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("JWT")))
-                .security(List.of(new SecurityRequirement().addList("bearerAuth")));
+                                        .bearerFormat("JWT")
+                                        .description("Enter JWT Bearer token **_only_**"))
+                        .addSecuritySchemes(
+                                "oauth2",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.OAUTH2)
+                                        .description("OAuth2 authentication")
+                                        .flows(new io.swagger.v3.oas.models.security.OAuthFlows()
+                                                .authorizationCode(new io.swagger.v3.oas.models.security.OAuthFlow()
+                                                        .authorizationUrl("/api/v1/auths/oauth2/login/google")
+                                                        .tokenUrl("/api/v1/auths/oauth2/login-success")
+                                                        .scopes(new io.swagger.v3.oas.models.security.Scopes()
+                                                                .addString("profile", "User profile information")
+                                                                .addString("email", "User email address"))))))
+                .security(List.of(
+                        new SecurityRequirement().addList("bearerAuth"),
+                        new SecurityRequirement().addList("oauth2")));
     }
 }

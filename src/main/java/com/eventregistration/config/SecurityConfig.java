@@ -29,7 +29,6 @@ public class SecurityConfig {
     CustomJwtDecoder customJwtDecoder;
     CustomJwtAuthenticationConverter customJwtAuthenticationConverter;
 
-    // Updated to remove the /api prefix since Spring adds it automatically
     private static final String[] PUBLIC_ENDPOINTS = {
         "/auths/**",
         "/v3/api-docs/**", // For Swagger/OpenAPI
@@ -50,15 +49,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS)
                         .permitAll()
                         .anyRequest()
-                        .authenticated());
-        // .oauth2Login(oauth2login -> {
-        //     oauth2login.defaultSuccessUrl("/auth/oauth2/login-success", true);
-        // });
-
-        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                        .decoder(customJwtDecoder)
-                        .jwtAuthenticationConverter(customJwtAuthenticationConverter))
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+                        .authenticated())
+                .oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/api/v1/auths/oauth2/login-success", true)
+                        .failureUrl("/api/v1/auths/oauth2/login-failure"))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
+                                .decoder(customJwtDecoder)
+                                .jwtAuthenticationConverter(customJwtAuthenticationConverter))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         return httpSecurity.build();

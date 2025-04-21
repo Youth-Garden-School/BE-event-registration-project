@@ -97,6 +97,7 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${openFeignVersion}"
     // Add this to your dependencies section if not already present
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 // Add Spring Cloud dependency management if not already present

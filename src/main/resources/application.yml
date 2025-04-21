@@ -37,8 +37,12 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: ${api-keys.google-client-id}
+            client-secret: ${api-keys.google-client-secret}
+            scope:
+              - email
+              - profile
+            redirect-uri: "{baseUrl}/api/v1/auths/oauth2/callback/{registrationId}"
           facebook:
             client-id: ${FACEBOOK_CLIENT_ID}
             client-secret: ${FACEBOOK_CLIENT_SECRET}
@@ -60,16 +64,34 @@ springdoc:
   swagger-ui:
     path: /api-documentation
     operations-sorter: method
+    tags-sorter: alpha
     disable-swagger-default-url: true
+    doc-expansion: none
+    display-request-duration: true
+    filter: true
+  api-docs:
+    path: /v3/api-docs
+    groups:
+      enabled: true
+  show-actuator: true
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+  paths-to-match: 
+    - /api/**
+    - /auths/**
+    - /users/**
+    - /events/**
+    - /calendars/**
 
 openapi:
   service:
     api-docs: api-service
     server:
-      local: http://localhost:8000/api
-      dev: https://backend-production-c2cb.up.railway.app/api
-    title: API Service Documentation
+      local: http://localhost:8000
+      dev: https://backend-production-c2cb.up.railway.app
+    title: Event Registration API
     version: 1.0.0
+    description: Comprehensive API for managing events, registrations, calendars, and users
 
 api-keys:
   brevo: ${BREVO_APIKEY}
