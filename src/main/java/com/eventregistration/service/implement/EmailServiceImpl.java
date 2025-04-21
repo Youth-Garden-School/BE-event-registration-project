@@ -64,9 +64,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public EmailResponse sendEmailWithAttachment(
-            SenderModel sender, 
-            List<RecipientModel> recipients, 
-            String subject, 
+            SenderModel sender,
+            List<RecipientModel> recipients,
+            String subject,
             String htmlContent,
             String attachmentName,
             byte[] attachmentContent,
@@ -78,7 +78,7 @@ public class EmailServiceImpl implements EmailService {
                     .content(Base64.getEncoder().encodeToString(attachmentContent))
                     .type(attachmentType)
                     .build();
-            
+
             // Create email request with attachment
             EmailRequest request = EmailRequest.builder()
                     .sender(sender)
@@ -167,7 +167,7 @@ public class EmailServiceImpl implements EmailService {
             throw new AppException(ErrorCode.EMAIL_SENDING_FAILED);
         }
     }
-    
+
     @Override
     public EmailResponse sendEventRegistrationEmail(Event event, EventAttendee attendee) {
         try {
@@ -176,15 +176,17 @@ public class EmailServiceImpl implements EmailService {
                     .email(apiKeyConfig.getSenderEmail())
                     .build();
 
-            RecipientModel recipient = RecipientModel.builder().email(attendee.getEmail()).build();
+            RecipientModel recipient =
+                    RecipientModel.builder().email(attendee.getEmail()).build();
 
             Context context = new Context();
             context.setVariable("eventTitle", event.getTitle());
             context.setVariable("eventDate", event.getStartTime().toLocalDate().toString());
             context.setVariable("eventTime", event.getStartTime().toLocalTime().toString());
             context.setVariable("eventLocation", event.getLocation() != null ? event.getLocation() : "Online");
-            context.setVariable("attendeeName", attendee.getUser() != null ? 
-                    attendee.getUser().getUsername() : attendee.getEmail());
+            context.setVariable(
+                    "attendeeName",
+                    attendee.getUser() != null ? attendee.getUser().getUsername() : attendee.getEmail());
             context.setVariable("status", attendee.getStatus().toString());
             context.setVariable("currentYear", Year.now().getValue());
 
@@ -197,12 +199,12 @@ public class EmailServiceImpl implements EmailService {
 
             // Generate ICS calendar attachment
             byte[] icsData = iCalendarService.generateIcsCalendar(event, attendee);
-            
+
             // Send email with ICS attachment
             return sendEmailWithAttachment(
-                    sender, 
-                    List.of(recipient), 
-                    "Event Registration Confirmation: " + event.getTitle(), 
+                    sender,
+                    List.of(recipient),
+                    "Event Registration Confirmation: " + event.getTitle(),
                     htmlContent,
                     "event.ics",
                     icsData,

@@ -66,7 +66,7 @@ openapi:
   service:
     api-docs: api-service
     server:
-      local: http://localhost:8080/api
+      local: http://localhost:8000/api
       dev: https://backend-production-c2cb.up.railway.app/api
     title: API Service Documentation
     version: 1.0.0

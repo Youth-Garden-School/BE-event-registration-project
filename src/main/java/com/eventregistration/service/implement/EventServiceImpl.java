@@ -56,52 +56,46 @@ public class EventServiceImpl implements EventService {
                 .requiresApproval(request.requiresApproval());
 
         if (request.calendarId() != null) {
-            Calendar calendar = calendarRepository.findById(request.calendarId())
+            Calendar calendar = calendarRepository
+                    .findById(request.calendarId())
                     .orElseThrow(() -> {
                         return new AppException(ErrorCode.CALENDAR_NOT_FOUND);
                     });
-        
-            
+
             eventBuilder.calendar(calendar);
         }
 
         Event event = eventBuilder.build();
         Event savedEvent = eventRepository.save(event);
-        
+
         return eventMapper.toResponse(savedEvent);
     }
 
     @Override
     public List<EventResponse> getUserEvents(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
         List<Event> events = eventRepository.findByCreatedBy(user);
-        
-        return events.stream()
-                .map(eventMapper::toResponse)
-                .collect(Collectors.toList());
+
+        return events.stream().map(eventMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     public EventResponse getUserEventById(UUID eventId, String username) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
-        
-        
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
+
         return eventMapper.toResponse(event);
     }
 
     @Override
     @Transactional
     public EventResponse updateEvent(UUID eventId, EventUpdateRequest request, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
-        
-        
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
+
         if (request.title() != null) event.setTitle(request.title());
         if (request.description() != null) event.setDescription(request.description());
         if (request.coverImage() != null) event.setCoverImage(request.coverImage());
@@ -115,27 +109,26 @@ public class EventServiceImpl implements EventService {
         if (request.style() != null) event.setStyle(request.style());
         if (request.seasonalTheme() != null) event.setSeasonalTheme(request.seasonalTheme());
         if (request.requiresApproval() != null) event.setRequiresApproval(request.requiresApproval());
-        
+
         if (request.calendarId() != null) {
-            Calendar calendar = calendarRepository.findById(request.calendarId())
+            Calendar calendar = calendarRepository
+                    .findById(request.calendarId())
                     .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
-            
+
             event.setCalendar(calendar);
         }
-        
+
         event.setUpdatedAt(LocalDateTime.now());
         Event updatedEvent = eventRepository.save(event);
-        
+
         return eventMapper.toResponse(updatedEvent);
     }
 
     @Override
     @Transactional
     public void deleteEvent(UUID eventId, String username) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
-        
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
+
         eventRepository.delete(event);
     }
-    
 }

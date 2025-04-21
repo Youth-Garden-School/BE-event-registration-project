@@ -1,15 +1,16 @@
 package com.eventregistration.mapper;
 
-import com.eventregistration.shared.dto.response.PaginationInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import com.eventregistration.shared.dto.response.PaginationInfo;
+
 @Component
 public class PageMapper {
-    
+
     /**
      * Converts a Spring Page object to a PaginationInfo object
-     * 
+     *
      * @param <T> The type of content in the page
      * @param page The Spring Page object to convert
      * @return A PaginationInfo object containing the page data

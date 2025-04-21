@@ -151,7 +151,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private String generateOtp() {
         SecureRandom random = new SecureRandom();
-        int otp = 100000 + random.nextInt(900000); 
+        int otp = 100000 + random.nextInt(900000);
         return String.valueOf(otp);
     }
 }

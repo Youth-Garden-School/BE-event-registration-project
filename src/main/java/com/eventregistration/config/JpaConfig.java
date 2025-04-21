@@ -20,15 +20,15 @@ public class JpaConfig {
     AuditorAware<UUID> auditorAware() {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            
+
             if (authentication == null || !authentication.isAuthenticated()) {
                 log.debug("No authenticated user found");
                 return Optional.empty();
             }
-            
+
             try {
                 Object principal = authentication.getPrincipal();
-                
+
                 // Handle JWT authentication
                 if (principal instanceof Jwt jwt) {
                     String userId = jwt.getClaimAsString("userId");
@@ -36,7 +36,7 @@ public class JpaConfig {
                         log.debug("Setting auditor from JWT userId: {}", userId);
                         return Optional.of(UUID.fromString(userId));
                     }
-                    
+
                     // Fallback to subject if userId claim is not available
                     String subject = jwt.getSubject();
                     if (subject != null && !subject.isEmpty()) {
@@ -48,7 +48,7 @@ public class JpaConfig {
                         }
                     }
                 }
-                
+
                 // For development/testing purposes, create a deterministic UUID from username
                 String username = authentication.getName();
                 if (username != null && !username.equals("anonymousUser")) {
@@ -58,7 +58,7 @@ public class JpaConfig {
             } catch (Exception e) {
                 log.error("Error determining current auditor", e);
             }
-            
+
             log.debug("Using system UUID as fallback");
             // Fallback to a system UUID for cases where we can't determine the user
             return Optional.of(UUID.fromString("00000000-0000-0000-0000-000000000000"));

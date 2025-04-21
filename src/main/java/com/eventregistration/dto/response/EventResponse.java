@@ -26,7 +26,7 @@ public record EventResponse(
         @Schema(description = "Seasonal theme", example = "CHRISTMAS") SeasonalTheme seasonalTheme,
         @Schema(description = "Whether approval is required to join", example = "false") boolean requiresApproval,
         @Schema(description = "List of attendees", example = "null") List<UserResponse> attendees,
-        @Schema(description = "Creation timestamp", example = "2023-11-15T10:30:00") LocalDateTime createdAt, 
+        @Schema(description = "Creation timestamp", example = "2023-11-15T10:30:00") LocalDateTime createdAt,
         LocalDateTime updatedAt,
         UUID createdBy,
         UUID updatedBy) {}

@@ -1,14 +1,15 @@
 package com.eventregistration.shared.dto.response;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -23,7 +24,7 @@ public class PaginationInfo<T> {
     long totalElements;
     boolean first;
     boolean last;
-    
+
     public static <E> PaginationInfo<E> fromPage(Page<E> page) {
         return PaginationInfo.<E>builder()
                 .content(page.getContent())

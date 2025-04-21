@@ -11,8 +11,10 @@ import com.eventregistration.entity.Calendar;
 
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar, UUID> {
-    
+
     List<Calendar> findByUserId(UUID userId);
-    
+
     Optional<Calendar> findByIdAndUserId(UUID id, UUID userId);
+
+    long countByUserId(UUID userId);
 }

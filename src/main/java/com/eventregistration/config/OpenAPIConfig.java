@@ -16,18 +16,17 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-class OpenAPIConfig {
+public class OpenAPIConfig {
 
     @Bean
     GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
         return GroupedOpenApi.builder()
                 .group(apiDocs) // /v3/api-docs/api-service
-                .packagesToScan("com.server.wordwaves.controller")
+                .packagesToScan("com.eventregistration.controller")
                 .build();
     }
 
     @Bean
-    // cấu hình group cho microservice
     OpenAPI openAPI(
             @Value("${openapi.service.title}") String title,
             @Value("${openapi.service.version}") String version,
@@ -36,10 +35,10 @@ class OpenAPIConfig {
         return new OpenAPI()
                 .servers(List.of(
                         new Server().url(localUrl).description("Local Server"),
-                        new Server().url(devUrl).description("Develop Server")))
+                        new Server().url(devUrl).description("Development Server")))
                 .info(new Info()
                         .title(title)
-                        .description("API documents")
+                        .description("Event Registration System API Documentation")
                         .version(version)
                         .license(new License().name("Apache 2.0").url("https://springdoc.org")))
                 .components(new Components()

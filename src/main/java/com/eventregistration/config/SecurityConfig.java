@@ -36,7 +36,7 @@ public class SecurityConfig {
         "/swagger-ui/**", // For Swagger UI
         "/api-documentation/**", // For your custom Swagger path
         "/actuator/**", // For Spring Boot Actuator if used
-        "/events/*/registrations/guest"    
+        "/events/*/registrations/guest"
     };
 
     @Bean

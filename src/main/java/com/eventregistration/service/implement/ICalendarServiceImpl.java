@@ -59,39 +59,43 @@ public class ICalendarServiceImpl implements ICalendarService {
             TimeZone timezone = registry.getTimeZone("Asia/Ho_Chi_Minh");
 
             // Create event start and end times
-            DateTime start = new DateTime(Date.from(event.getStartTime().atZone(ZoneId.systemDefault()).toInstant()));
+            DateTime start = new DateTime(Date.from(
+                    event.getStartTime().atZone(ZoneId.systemDefault()).toInstant()));
             start.setTimeZone(timezone);
-            
-            DateTime end = new DateTime(Date.from(event.getEndTime().atZone(ZoneId.systemDefault()).toInstant()));
+
+            DateTime end = new DateTime(
+                    Date.from(event.getEndTime().atZone(ZoneId.systemDefault()).toInstant()));
             end.setTimeZone(timezone);
 
             // Create the event
             VEvent vEvent = new VEvent(start, end, event.getTitle());
-            
+
             // Add event properties
             vEvent.getProperties().add(new Uid(UUID.randomUUID().toString()));
-            
+
             if (event.getDescription() != null && !event.getDescription().isEmpty()) {
                 vEvent.getProperties().add(new Description(event.getDescription()));
             }
-            
+
             if (event.getLocation() != null && !event.getLocation().isEmpty()) {
                 vEvent.getProperties().add(new Location(event.getLocation()));
             }
-            
+
             // Add organizer
             String organizerEmail = "noreply@eventregistration.com";
             String organizerName = "Event Registration System";
-            
+
             if (event.getCreatedBy() != null) {
                 // Try to find the user who created the event
-                User eventCreator = userRepository.findById(event.getCreatedBy()).orElse(null);
-                
+                User eventCreator =
+                        userRepository.findById(event.getCreatedBy()).orElse(null);
+
                 if (eventCreator != null) {
                     organizerName = eventCreator.getUsername();
-                    
+
                     // Try to get primary email
-                    if (eventCreator.getEmails() != null && !eventCreator.getEmails().isEmpty()) {
+                    if (eventCreator.getEmails() != null
+                            && !eventCreator.getEmails().isEmpty()) {
                         organizerEmail = eventCreator.getEmails().stream()
                                 .filter(e -> e.isPrimary())
                                 .findFirst()
@@ -100,31 +104,31 @@ public class ICalendarServiceImpl implements ICalendarService {
                     }
                 }
             }
-            
+
             Organizer organizer = new Organizer("mailto:" + organizerEmail);
             organizer.getParameters().add(new Cn(organizerName));
             vEvent.getProperties().add(organizer);
-            
+
             // Add attendee
             Attendee icsAttendee = new Attendee("mailto:" + attendee.getEmail());
             icsAttendee.getParameters().add(Role.REQ_PARTICIPANT);
-            
+
             String attendeeName = attendee.getEmail();
             if (attendee.getUser() != null) {
                 attendeeName = attendee.getUser().getUsername();
             }
-            
+
             icsAttendee.getParameters().add(new Cn(attendeeName));
             vEvent.getProperties().add(icsAttendee);
-            
+
             // Add event to calendar
             calendar.getComponents().add(vEvent);
-            
+
             // Write calendar to byte array
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             CalendarOutputter outputter = new CalendarOutputter();
             outputter.output(calendar, baos);
-            
+
             return baos.toByteArray();
         } catch (Exception e) {
             log.error("Error generating ICS calendar", e);

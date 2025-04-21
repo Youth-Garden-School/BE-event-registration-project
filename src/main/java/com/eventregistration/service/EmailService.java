@@ -34,9 +34,9 @@ public interface EmailService {
      * @return Email response from the email service provider
      */
     EmailResponse sendEmailWithAttachment(
-            SenderModel sender, 
-            List<RecipientModel> recipients, 
-            String subject, 
+            SenderModel sender,
+            List<RecipientModel> recipients,
+            String subject,
             String htmlContent,
             String attachmentName,
             byte[] attachmentContent,
@@ -53,7 +53,7 @@ public interface EmailService {
 
     /**
      * Send a password reset email
-     * 
+     *
      * @param email Recipient email address
      * @param resetLink Password reset link
      * @param userName Username of the recipient
@@ -61,10 +61,10 @@ public interface EmailService {
      * @return Email response from the email service provider
      */
     EmailResponse sendResetPasswordEmail(String email, String resetLink, String userName, long expirationMinutes);
-    
+
     /**
      * Send an event registration confirmation email with ICS calendar attachment
-     * 
+     *
      * @param event The event being registered for
      * @param attendee The attendee who registered
      * @return Email response from the email service provider

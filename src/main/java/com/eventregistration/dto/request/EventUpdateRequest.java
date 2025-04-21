@@ -16,10 +16,8 @@ public record EventUpdateRequest(
                 String description,
         @Schema(description = "URL to event cover image", example = "https://example.com/images/updated-tech-conf.jpg")
                 String coverImage,
-        @Schema(description = "Event start time", example = "2023-12-01T10:00:00")
-                LocalDateTime startTime,
-        @Schema(description = "Event end time", example = "2023-12-01T18:00:00")
-                LocalDateTime endTime,
+        @Schema(description = "Event start time", example = "2023-12-01T10:00:00") LocalDateTime startTime,
+        @Schema(description = "Event end time", example = "2023-12-01T18:00:00") LocalDateTime endTime,
         @Schema(description = "Physical location of the event", example = "Updated Convention Center, 123 Main St")
                 String location,
         @Schema(description = "Whether the event is online", example = "true") Boolean isOnline,

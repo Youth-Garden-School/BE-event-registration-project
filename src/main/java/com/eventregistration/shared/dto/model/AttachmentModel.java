@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class AttachmentModel {
     private String name;
     private String content; // Base64 encoded content
-    private String type;    // MIME type
+    private String type; // MIME type
 }
