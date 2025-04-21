@@ -1,6 +1,7 @@
 package com.eventregistration.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -37,8 +38,11 @@ public class Event extends BaseAuthor {
     @JoinColumn(name = "CalendarId", nullable = true)
     Calendar calendar;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<EventAttendee> attendees;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    List<EventAttendee> attendees = new ArrayList<EventAttendee>();
 
     String eventColor;
     String fontStyle;

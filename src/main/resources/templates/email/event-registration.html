@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #4a86e8;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .event-details {
+            margin: 20px 0;
+        }
+        .event-details div {
+            margin-bottom: 10px;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4a86e8;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .status-confirmed {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .status-pending {
+            background-color: #FFC107;
+            color: black;
+        }
+        .status-cancelled {
+            background-color: #F44336;
+            color: white;
+        }
+        .calendar-buttons {
+            margin-top: 25px;
+            text-align: center;
+        }
+        .calendar-button {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+        .google {
+            border-color: #4285F4;
+            color: #4285F4;
+        }
+        .outlook {
+            border-color: #0078D4;
+            color: #0078D4;
+        }
+        .yahoo {
+            border-color: #6001D2;
+            color: #6001D2;
+        }
+        .apple {
+            border-color: #999;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Event Registration Confirmation</h1>
+    </div>
+    
+    <div class="content">
+        <p>Hello <span th:text="${attendeeName}">User</span>,</p>
+        
+        <p>Thank you for registering for the following event:</p>
+        
+        <div class="event-details">
+            <div>
+                <span class="label">Event:</span> 
+                <span th:text="${eventTitle}">Event Title</span>
+            </div>
+            <div>
+                <span class="label">Date:</span> 
+                <span th:text="${eventDate}">Event Date</span>
+            </div>
+            <div>
+                <span class="label">Time:</span> 
+                <span th:text="${eventTime}">Event Time</span>
+            </div>
+            <div>
+                <span class="label">Location:</span> 
+                <span th:text="${eventLocation}">Event Location</span>
+            </div>
+            <div>
+                <span class="label">Registration Status:</span> 
+                <span th:class="${'status ' + (status == 'CONFIRMED' ? 'status-confirmed' : (status == 'PENDING' ? 'status-pending' : 'status-cancelled'))}" 
+                      th:text="${status}">Status</span>
+            </div>
+        </div>
+        
+        <p th:if="${status == 'CONFIRMED'}">
+            Your registration has been confirmed. We've attached a calendar invitation to this email that you can add to your calendar.
+        </p>
+        
+        <p th:if="${status == 'PENDING'}">
+            Your registration is pending approval. We'll notify you once it's been reviewed.
+        </p>
+        
+        <!-- Add to Calendar section -->
+        <div class="calendar-buttons" th:if="${status == 'CONFIRMED'}">
+            <p><strong>Add to your calendar:</strong></p>
+            
+            <!-- Google Calendar -->
+            <a th:href="${'https://www.google.com/calendar/render?action=TEMPLATE&text=' + #uris.escapeQueryParam(eventTitle) + 
+                '&dates=' + #temporals.format(#temporals.createFromFormatAndSource('yyyy-MM-dd HH:mm', eventDate + ' ' + eventTime), 'yyyyMMdd\'T\'HHmmss') + '/' + 
+                #temporals.format(#temporals.createFromFormatAndSource('yyyy-MM-dd HH:mm', eventDate + ' ' + eventTime).plusHours(1), 'yyyyMMdd\'T\'HHmmss') + 
+                '&details=' + #uris.escapeQueryParam('Event registration confirmation') + 
+                '&location=' + #uris.escapeQueryParam(eventLocation)}" 
+               class="calendar-button google" target="_blank">
+                Google Calendar
+            </a>
+            
+            <!-- Outlook Web -->
+            <a th:href="${'https://outlook.live.com/calendar/0/deeplink/compose?subject=' + #uris.escapeQueryParam(eventTitle) + 
+                '&startdt=' + #temporals.format(#temporals.createFromFormatAndSource('yyyy-MM-dd HH:mm', eventDate + ' ' + eventTime), 'yyyy-MM-dd\'T\'HH:mm:ss') + 
+                '&enddt=' + #temporals.format(#temporals.createFromFormatAndSource('yyyy-MM-dd HH:mm', eventDate + ' ' + eventTime).plusHours(1), 'yyyy-MM-dd\'T\'HH:mm:ss') + 
+                '&body=' + #uris.escapeQueryParam('Event registration confirmation') + 
+                '&location=' + #uris.escapeQueryParam(eventLocation)}" 
+               class="calendar-button outlook" target="_blank">
+                Outlook Calendar
+            </a>
+            
+            <!-- Yahoo Calendar -->
+            <a th:href="${'https://calendar.yahoo.com/?v=60&title=' + #uris.escapeQueryParam(eventTitle) + 
+                '&st=' + #temporals.format(#temporals.createFromFormatAndSource('yyyy-MM-dd HH:mm', eventDate + ' ' + eventTime), 'yyyyMMdd\'T\'HHmmss') + 
+                '&et=' + #temporals.format(#temporals.createFromFormatAndSource('yyyy-MM-dd HH:mm', eventDate + ' ' + eventTime).plusHours(1), 'yyyyMMdd\'T\'HHmmss') + 
+                '&desc=' + #uris.escapeQueryParam('Event registration confirmation') + 
+                '&in_loc=' + #uris.escapeQueryParam(eventLocation)}" 
+               class="calendar-button yahoo" target="_blank">
+                Yahoo Calendar
+            </a>
+            
+            <p style="margin-top: 10px; font-size: 13px;">
+                <strong>Note:</strong> For Apple Calendar, Outlook desktop, and other calendar apps, please use the attached ICS file.
+            </p>
+        </div>
+        
+        <p>
+            If you have any questions or need to make changes to your registration, please contact us.
+        </p>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; <span th:text="${currentYear}">2023</span> Regista. All rights reserved.</p>
+        <p>This is an automated message, please do not reply to this email.</p>
+    </div>
+</body>
+</html>

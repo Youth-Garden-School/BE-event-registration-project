@@ -116,6 +116,14 @@ public enum ErrorCode {
     EVENT_INVALID_TIME_RANGE(2004, "Thời gian kết thúc phải sau thời gian bắt đầu", HttpStatus.BAD_REQUEST),
     EVENT_UNAUTHORIZED_ACCESS(2005, "Bạn không có quyền truy cập sự kiện này", HttpStatus.FORBIDDEN),
 
+        // REGISTRATION ERROR (2100-2199)
+        USER_ALREADY_REGISTERED(2100, "Người dùng đã đăng ký tham gia sự kiện này", HttpStatus.BAD_REQUEST),
+        EMAIL_ALREADY_REGISTERED(2101, "Email đã được đăng ký tham gia sự kiện này", HttpStatus.BAD_REQUEST),
+        GUEST_EMAIL_REQUIRED(2102, "Email khách không được để trống", HttpStatus.BAD_REQUEST),
+        USER_EMAIL_NOT_FOUND(2103, "Người dùng không có địa chỉ email chính", HttpStatus.BAD_REQUEST),
+        REGISTRATION_NOT_FOUND(2104, "Không tìm thấy đăng ký tham gia", HttpStatus.NOT_FOUND),
+        ACCESS_DENIED(2105, "Bạn không có quyền truy cập tài nguyên này", HttpStatus.FORBIDDEN),
+
 
 
 
