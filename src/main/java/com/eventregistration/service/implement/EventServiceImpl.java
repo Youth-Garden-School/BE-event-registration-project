@@ -20,6 +20,7 @@ import com.eventregistration.mapper.EventMapper;
 import com.eventregistration.repository.CalendarRepository;
 import com.eventregistration.repository.EventRepository;
 import com.eventregistration.repository.UserRepository;
+import com.eventregistration.service.EmailService;
 import com.eventregistration.service.EventService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class EventServiceImpl implements EventService {
     private final CalendarRepository calendarRepository;
     private final UserRepository userRepository;
     private final EventMapper eventMapper;
+    private final EmailService emailService;
 
     @Override
     @Transactional
@@ -135,4 +137,5 @@ public class EventServiceImpl implements EventService {
         
         eventRepository.delete(event);
     }
+    
 }

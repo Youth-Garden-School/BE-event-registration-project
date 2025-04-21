@@ -36,8 +36,6 @@ public interface AuthenticationMapper {
      * @param isNewUser Whether this is a new user registration
      * @return AuthResponse containing user details and tokens
      */
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "username", source = "user.username")
     @Mapping(target = "accessToken", source = "accessToken")
     @Mapping(target = "refreshToken", source = "refreshToken")
     @Mapping(target = "isNewUser", source = "isNewUser")

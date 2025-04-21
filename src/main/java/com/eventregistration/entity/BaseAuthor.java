@@ -2,6 +2,8 @@ package com.eventregistration.entity;
 
 import jakarta.persistence.MappedSuperclass;
 
+import java.util.UUID;
+
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -21,8 +23,8 @@ import lombok.experimental.SuperBuilder;
 public abstract class BaseAuthor extends BaseEntity {
 
     @CreatedBy
-    String createdBy;
+    UUID createdBy;
 
     @LastModifiedBy
-    String updatedBy;
+    UUID updatedBy;
 }

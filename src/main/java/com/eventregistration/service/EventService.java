@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.eventregistration.dto.request.EventCreationRequest;
+import com.eventregistration.dto.request.EventRegistrationRequest;
 import com.eventregistration.dto.request.EventUpdateRequest;
+import com.eventregistration.dto.response.EventRegistrationResponse;
 import com.eventregistration.dto.response.EventResponse;
 
 public interface EventService {
@@ -51,4 +53,5 @@ public interface EventService {
      * @param username Username of the authenticated user
      */
     void deleteEvent(UUID eventId, String username);
+    
 }

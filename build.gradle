@@ -26,6 +26,7 @@ ext {
     dotEnvVersion = '3.0.2'
     openFeignVersion = '4.0.4'
     springCloudVersion = '2023.0.0'
+    icsVersion = '3.2.10'
 }
 
 configurations {
@@ -51,10 +52,14 @@ dependencies {
     implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework:spring-aspects'
 
+    implementation "org.mnode.ical4j:ical4j:${icsVersion}"
+
     // Database drivers for persistence
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'com.h2database:h2'
+
+    
 
 
     // Redis client (tùy chọn, nếu cần cấu hình nâng cao)
