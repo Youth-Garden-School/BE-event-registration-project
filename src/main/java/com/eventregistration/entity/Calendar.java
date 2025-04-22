@@ -22,7 +22,7 @@ public class Calendar extends BaseAuthor {
     String color;
 
     @ManyToOne
-    @JoinColumn(name = "UserId", nullable = false) // Thêm thuộc tính này
+    @JoinColumn(name = "UserId", nullable = false)
     User user;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL, orphanRemoval = true)

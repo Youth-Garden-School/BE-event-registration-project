@@ -15,11 +15,10 @@ import com.eventregistration.entity.User;
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {UserMapper.class})
+        uses = {UserMapper.class, EventMapper.class})
 public interface CalendarMapper {
 
-    @Mappings({@Mapping(target = "userId", source = "user.id"), @Mapping(target = "username", source = "user.username")
-    })
+    @Mapping(target = "events", source = "events")
     CalendarResponse toResponse(Calendar calendar);
 
     @Mapping(target = "id", ignore = true)

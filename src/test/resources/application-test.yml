@@ -14,7 +14,6 @@ spring:
     redis:
       host: localhost
       port: 6379
-      client-type: none
   security:
     oauth2:
       client:
