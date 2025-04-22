@@ -20,7 +20,7 @@ public class ApiResponse<T> {
 
     @Schema(description = "Response message", example = "Operation completed successfully")
     String message;
-    
+
     @Schema(description = "Response data payload")
     T result;
 }

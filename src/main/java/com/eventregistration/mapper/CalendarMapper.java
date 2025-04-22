@@ -3,7 +3,6 @@ package com.eventregistration.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 
 import com.eventregistration.dto.request.CalendarCreationRequest;

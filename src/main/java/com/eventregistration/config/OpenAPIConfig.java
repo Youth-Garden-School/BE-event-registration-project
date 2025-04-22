@@ -39,16 +39,15 @@ public class OpenAPIConfig {
                         new Server().url(devUrl).description("Development Server")))
                 .info(new Info()
                         .title(title)
-                        .description("Event Registration System API Documentation - Comprehensive API for managing events, registrations, calendars, and users")
+                        .description(
+                                "Event Registration System API Documentation - Comprehensive API for managing events, registrations, calendars, and users")
                         .version(version)
                         .contact(new Contact()
                                 .name("Event Registration Team")
                                 .email("support@eventregistration.com")
                                 .url("https://eventregistration.com"))
                         .termsOfService("https://eventregistration.com/terms")
-                        .license(new License()
-                                .name("Apache 2.0")
-                                .url("https://www.apache.org/licenses/LICENSE-2.0")))
+                        .license(new License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0")))
                 .components(new Components()
                         .addSecuritySchemes(
                                 "bearerAuth",
@@ -70,7 +69,6 @@ public class OpenAPIConfig {
                                                                 .addString("profile", "User profile information")
                                                                 .addString("email", "User email address"))))))
                 .security(List.of(
-                        new SecurityRequirement().addList("bearerAuth"),
-                        new SecurityRequirement().addList("oauth2")));
+                        new SecurityRequirement().addList("bearerAuth"), new SecurityRequirement().addList("oauth2")));
     }
 }

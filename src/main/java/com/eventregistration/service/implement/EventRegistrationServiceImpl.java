@@ -42,11 +42,9 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
     EmailService emailService;
     PageMapper pageMapper;
 
-    // registerForEvent method remains unchanged
     @Override
     @Transactional
     public EventRegistrationResponse registerForEvent(UUID eventId, EventRegistrationRequest request, String username) {
-        // Implementation remains the same
         log.info("Registering for event: {} by user: {}", eventId, username);
 
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
@@ -89,7 +87,6 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
         EventAttendee attendee = attendeeBuilder.build();
         EventAttendee savedAttendee = eventAttendeeRepository.save(attendee);
 
-        // Send confirmation email with ICS attachment
         try {
             emailService.sendEventRegistrationEmail(event, savedAttendee);
             log.info("Registration confirmation email sent to: {}", savedAttendee.getEmail());
@@ -138,7 +135,6 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
         return pageMapper.toPaginationInfo(responsePage);
     }
 
-    // cancelRegistration method remains unchanged
     @Override
     @Transactional
     public void cancelRegistration(UUID registrationId, String username) {
@@ -148,11 +144,9 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
                 .findById(registrationId)
                 .orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_FOUND));
 
-        // Check if user is authorized to cancel
         User user =
                 userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // User can cancel if they are the attendee or the event owner
         boolean isAttendee =
                 attendee.getUser() != null && attendee.getUser().getId().equals(user.getId());
         boolean isEventOwner = attendee.getEvent().getCreatedBy().equals(user.getId());
