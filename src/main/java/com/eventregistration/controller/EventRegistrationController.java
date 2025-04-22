@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@Tag(name = "Event Registration", description = "APIs for event registration management")
+@Tag(name = "Event Registration Controller", description = "APIs for event registration management")
 public class EventRegistrationController {
 
     EventRegistrationService eventRegistrationService;

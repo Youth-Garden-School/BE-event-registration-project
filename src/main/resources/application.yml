@@ -88,7 +88,7 @@ openapi:
     api-docs: api-service
     server:
       local: http://localhost:8000
-      dev: https://backend-production-c2cb.up.railway.app
+      dev: https://be-event-registration-project-production.up.railway.app
     title: Event Registration API
     version: 1.0.0
     description: Comprehensive API for managing events, registrations, calendars, and users

@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@Tag(name = "Calendar", description = "APIs for calendar management")
+@Tag(name = "Calendar Controller", description = "APIs for calendar management")
 public class CalendarController {
 
     CalendarService calendarService;
