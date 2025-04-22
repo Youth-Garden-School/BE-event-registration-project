@@ -15,8 +15,8 @@ public record EventRegistrationResponse(
         @Schema(description = "Registration status", example = "CONFIRMED") AttendeeStatus status,
         @Schema(description = "Registration timestamp", example = "2023-11-15T10:30:00") LocalDateTime registeredAt,
         @Schema(description = "Notes provided during registration", example = "Looking forward to the event!")
-                String notes, 
-                LocalDateTime createdAt,
-                LocalDateTime updatedAt,
-                UUID createdBy,
-                UUID updatedBy) {}
+                String notes,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        UUID createdBy,
+        UUID updatedBy) {}

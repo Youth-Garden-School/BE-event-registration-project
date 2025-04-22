@@ -15,6 +15,6 @@ public interface EventAttendeeMapper {
 
     @Mapping(target = "event", source = "event")
     @Mapping(target = "user", source = "user")
-    @Mapping(target ="registeredAt", source = "createdAt")
+    @Mapping(target = "registeredAt", source = "createdAt")
     EventRegistrationResponse toRegistrationResponse(EventAttendee eventAttendee);
 }

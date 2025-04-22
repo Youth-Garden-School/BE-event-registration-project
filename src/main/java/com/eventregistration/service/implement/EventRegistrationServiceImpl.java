@@ -156,6 +156,6 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
         }
 
         attendee.setStatus(AttendeeStatus.CANCELLED);
-        EventAttendee updatedAttendee = eventAttendeeRepository.save(attendee);
+        eventAttendeeRepository.save(attendee);
     }
 }

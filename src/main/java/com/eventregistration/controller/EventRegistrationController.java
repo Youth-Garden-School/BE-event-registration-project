@@ -78,7 +78,8 @@ public class EventRegistrationController {
             summary = "Get event registrations",
             description = "Get all registrations for an event (event owner only)")
     public ApiResponse<PaginationInfo<EventRegistrationResponse>> getEventRegistrations(
-            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID eventId, @Valid PageRequest pageRequest) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID eventId, @Valid @RequestBody PageRequest pageRequest) {
+
 
         String username = jwt.getClaimAsString("username");
         log.info("Getting registrations for event: {} by user: {}", eventId, username);
@@ -97,7 +98,7 @@ public class EventRegistrationController {
             summary = "Get user registrations",
             description = "Get all events the authenticated user is registered for")
     public ApiResponse<PaginationInfo<EventRegistrationResponse>> getUserRegistrations(
-            @AuthenticationPrincipal Jwt jwt, @Valid PageRequest pageRequest) {
+            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody PageRequest pageRequest) {
 
         String username = jwt.getClaimAsString("username");
         log.info("Getting registrations for user: {}", username);
