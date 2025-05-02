@@ -28,4 +28,5 @@ public record EventUpdateRequest(
         @Schema(description = "Style of the event", example = "MINIMAL") EventStyle style,
         @Schema(description = "Seasonal theme for the event", example = "HALLOWEEN") SeasonalTheme seasonalTheme,
         @Schema(description = "Whether approval is required to join the event", example = "true")
-                Boolean requiresApproval) {}
+                Boolean requiresApproval,
+        @Schema(description = "Event category", example = "Technology") String category) {}

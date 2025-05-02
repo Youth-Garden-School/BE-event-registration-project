@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriUtils;
 
 import com.eventregistration.dto.request.EventCreationRequest;
 import com.eventregistration.dto.request.EventUpdateRequest;
@@ -53,7 +54,8 @@ public class EventServiceImpl implements EventService {
                 .themeMode(request.themeMode())
                 .style(request.style())
                 .seasonalTheme(request.seasonalTheme())
-                .requiresApproval(request.requiresApproval());
+                .requiresApproval(request.requiresApproval())
+                .category(request.category());
 
         if (request.calendarId() != null) {
             Calendar calendar = calendarRepository
@@ -90,6 +92,22 @@ public class EventServiceImpl implements EventService {
         return eventMapper.toResponse(event);
     }
 
+
+    @Override
+    public List<EventResponse> getEventsByCategory(String category) {
+        log.info("Fetching events with category: {}", category);
+        System.out.println("Category (raw): " + category);
+        
+        List<Event> events = eventRepository.findByCategoryContainingIgnoreCase(UriUtils.decode(category, "UTF-8"));
+
+
+        log.info("Events found: {}", events.size());
+        
+        return events.stream()
+                .map(eventMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     @Override
     @Transactional
     public EventResponse updateEvent(UUID eventId, EventUpdateRequest request, String username) {
@@ -111,6 +129,7 @@ public class EventServiceImpl implements EventService {
         if (request.style() != null) event.setStyle(request.style());
         if (request.seasonalTheme() != null) event.setSeasonalTheme(request.seasonalTheme());
         if (request.requiresApproval() != null) event.setRequiresApproval(request.requiresApproval());
+        if (request.category() != null) event.setCategory(request.category());
 
         if (request.calendarId() != null) {
             Calendar calendar = calendarRepository

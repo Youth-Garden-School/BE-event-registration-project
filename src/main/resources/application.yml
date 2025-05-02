@@ -1,8 +1,12 @@
 server:
+  tomcat:
+    uri-encoding: UTF-8
   servlet:
     context-path: /api
     encoding:
-      charset: UTF8
+      charset: UTF-8
+      force: true
+      enabled: true
   port: 8000
   compression:
     enabled: true

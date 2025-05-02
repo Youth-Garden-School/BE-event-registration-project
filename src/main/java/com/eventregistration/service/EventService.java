@@ -34,6 +34,8 @@ public interface EventService {
      */
     EventResponse getUserEventById(UUID eventId, String username);
 
+    List<EventResponse> getEventsByCategory(String category);
+
     /**
      * Update an existing event
      *

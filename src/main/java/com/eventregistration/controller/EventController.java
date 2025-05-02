@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 
 import com.eventregistration.dto.ApiResponse;
 import com.eventregistration.dto.request.EventCreationRequest;
@@ -112,5 +114,23 @@ public class EventController {
         eventService.deleteEvent(eventId, username);
 
         return ApiResponse.<Void>builder().message("Event deleted successfully").build();
+    }
+
+    @GetMapping("/category")
+    @Operation(summary = "Get events by category", description = "Get all events with the specified category")
+    public ApiResponse<List<EventResponse>> getEventsByCategory(
+            @AuthenticationPrincipal Jwt jwt, @RequestParam String category) {
+
+        String decodedCategory = UriUtils.decode(category, "UTF-8");
+        
+        String username = jwt.getClaimAsString("username");
+        log.info("Fetching events with category: {} for user: {}", decodedCategory, username);
+
+        List<EventResponse> events = eventService.getEventsByCategory(decodedCategory);
+
+        return ApiResponse.<List<EventResponse>>builder()
+                .message("Events with category '" + decodedCategory + "' fetched successfully")
+                .result(events)
+                .build();
     }
 }
