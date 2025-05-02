@@ -50,6 +50,7 @@ public class JwtServiceImpl implements JwtService {
         try {
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWS_ALGORITHM), claimsSet);
             signedJWT.sign(new MACSigner(key.getBytes()));
+
             return signedJWT.serialize();
         } catch (JOSEException e) {
             log.error("Failed to generate JWT token: {}", e.getMessage(), e);
@@ -62,6 +63,7 @@ public class JwtServiceImpl implements JwtService {
             Objects.requireNonNull(token, "Token cannot be null");
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = new MACVerifier(key.getBytes());
+            
             if (!signedJWT.verify(verifier)) {
                 throw new AppException(ErrorCode.TOKEN_INVALID);
             }

@@ -11,5 +11,5 @@ import com.eventregistration.entity.User;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, UUID> {
-    List<Event> findByCreatedBy(User user);
+    List<Event> findByCreatedBy(UUID uuid);
 }

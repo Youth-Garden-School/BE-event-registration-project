@@ -76,7 +76,9 @@ public class EventServiceImpl implements EventService {
         User user =
                 userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        List<Event> events = eventRepository.findByCreatedBy(user);
+        log.info("Fetching events for user: {}", username);
+
+        List<Event> events = eventRepository.findByCreatedBy(user.getId());
 
         return events.stream().map(eventMapper::toResponse).collect(Collectors.toList());
     }
