@@ -27,6 +27,8 @@ public interface CalendarMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "events", ignore = true)
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "coverImage", source = "request.coverImage")
+    @Mapping(target = "avatarImage", source = "request.avatarImage")
     Calendar toEntity(CalendarCreationRequest request, User user);
 
     @Mapping(target = "id", ignore = true)

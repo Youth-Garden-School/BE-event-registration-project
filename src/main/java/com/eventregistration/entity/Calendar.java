@@ -20,6 +20,8 @@ public class Calendar extends BaseAuthor {
 
     String name;
     String color;
+    String coverImage;
+    String avatarImage;
 
     @ManyToOne
     @JoinColumn(name = "UserId", nullable = false)
