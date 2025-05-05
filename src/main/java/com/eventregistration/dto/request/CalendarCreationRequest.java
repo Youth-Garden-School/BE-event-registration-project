@@ -14,7 +14,10 @@ public record CalendarCreationRequest(
         @NotBlank(message = "CALENDAR_COLOR_REQUIRED")
                 @Schema(description = "Calendar color in hex format", example = "#4285F4", required = true)
                 String color,
-        @Schema(description = "Calendar cover image URL", example = "https://example.com/cover.jpg")
-                String coverImage,
+        @Schema(description = "Calendar cover image URL", example = "https://example.com/cover.jpg") String coverImage,
         @Schema(description = "Calendar avatar image URL", example = "https://example.com/avatar.jpg")
-                String avatarImage) {}
+                String avatarImage,
+        @Schema(
+                        description = "Calendar detailed description",
+                        example = "This calendar contains all my work-related events and meetings")
+                String description) {}

@@ -63,7 +63,7 @@ public class JwtServiceImpl implements JwtService {
             Objects.requireNonNull(token, "Token cannot be null");
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = new MACVerifier(key.getBytes());
-            
+
             if (!signedJWT.verify(verifier)) {
                 throw new AppException(ErrorCode.TOKEN_INVALID);
             }

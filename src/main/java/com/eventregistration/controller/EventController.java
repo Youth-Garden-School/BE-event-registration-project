@@ -122,7 +122,7 @@ public class EventController {
             @AuthenticationPrincipal Jwt jwt, @RequestParam String category) {
 
         String decodedCategory = UriUtils.decode(category, "UTF-8");
-        
+
         String username = jwt.getClaimAsString("username");
         log.info("Fetching events with category: {} for user: {}", decodedCategory, username);
 

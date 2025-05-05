@@ -98,7 +98,18 @@ public class CalendarServiceImpl implements CalendarService {
                 .findByIdAndUserId(calendarId, user.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
 
-        calendar = calendarMapper.updateFromRequest(request, calendar);
+        if (request.name() != null) calendar.setName(request.name());
+
+        if (request.color() != null) calendar.setColor(request.color());
+
+        if (request.coverImage() != null) calendar.setCoverImage(request.coverImage());
+
+        if (request.avatarImage() != null) calendar.setAvatarImage(request.avatarImage());
+
+        if (request.description() != null) calendar.setDescription(request.description());
+
+        calendar.setUpdatedAt(LocalDateTime.now());
+        calendar.setUpdatedBy(user.getId());
 
         Calendar updatedCalendar = calendarRepository.save(calendar);
 
@@ -118,7 +129,6 @@ public class CalendarServiceImpl implements CalendarService {
                 .findByIdAndUserId(calendarId, user.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
 
-        // Check if this is the user's only calendar
         long calendarCount = calendarRepository.countByUserId(user.getId());
         if (calendarCount <= 1) {
             throw new AppException(ErrorCode.CALENDAR_CANNOT_DELETE_LAST);
@@ -131,62 +141,57 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     @Transactional
     public EventResponse addEventToCalendar(UUID calendarId, UUID eventId, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        
-        Calendar calendar = calendarRepository.findById(calendarId)
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Calendar calendar = calendarRepository
+                .findById(calendarId)
                 .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
-        
-        // Kiểm tra xem lịch có thuộc về người dùng không
+
         if (!calendar.getUser().getId().equals(user.getId())) {
             throw new AppException(ErrorCode.CALENDAR_UNAUTHORIZED_ACCESS);
         }
-        
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
-        
-        // Gán sự kiện vào lịch
+
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
+
         event.setCalendar(calendar);
         event.setUpdatedAt(LocalDateTime.now());
         event.setUpdatedBy(user.getId());
-        
+
         Event updatedEvent = eventRepository.save(event);
-        
+
         return eventMapper.toResponse(updatedEvent);
     }
 
     @Override
     @Transactional
     public List<EventResponse> addEventsToCalendar(UUID calendarId, List<UUID> eventIds, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        
-        Calendar calendar = calendarRepository.findById(calendarId)
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Calendar calendar = calendarRepository
+                .findById(calendarId)
                 .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
-        
-        // Kiểm tra xem lịch có thuộc về người dùng không
+
         if (!calendar.getUser().getId().equals(user.getId())) {
             throw new AppException(ErrorCode.CALENDAR_UNAUTHORIZED_ACCESS);
         }
-        
+
         List<Event> updatedEvents = new ArrayList<>();
-        
+
         for (UUID eventId : eventIds) {
-            Event event = eventRepository.findById(eventId)
-                    .orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
-            
-            // Gán sự kiện vào lịch
+            Event event =
+                    eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
+
             event.setCalendar(calendar);
             event.setUpdatedAt(LocalDateTime.now());
             event.setUpdatedBy(user.getId());
-            
+
             updatedEvents.add(event);
         }
-        
+
         List<Event> savedEvents = eventRepository.saveAll(updatedEvents);
-        
-        return savedEvents.stream()
-                .map(eventMapper::toResponse)
-                .collect(Collectors.toList());
+
+        return savedEvents.stream().map(eventMapper::toResponse).collect(Collectors.toList());
     }
 }

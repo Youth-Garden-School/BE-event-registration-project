@@ -92,20 +92,16 @@ public class EventServiceImpl implements EventService {
         return eventMapper.toResponse(event);
     }
 
-
     @Override
     public List<EventResponse> getEventsByCategory(String category) {
         log.info("Fetching events with category: {}", category);
         System.out.println("Category (raw): " + category);
-        
+
         List<Event> events = eventRepository.findByCategoryContainingIgnoreCase(UriUtils.decode(category, "UTF-8"));
 
-
         log.info("Events found: {}", events.size());
-        
-        return events.stream()
-                .map(eventMapper::toResponse)
-                .collect(Collectors.toList());
+
+        return events.stream().map(eventMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override

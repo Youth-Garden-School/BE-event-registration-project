@@ -80,7 +80,6 @@ public class EventRegistrationController {
     public ApiResponse<PaginationInfo<EventRegistrationResponse>> getEventRegistrations(
             @AuthenticationPrincipal Jwt jwt, @PathVariable UUID eventId, @Valid @RequestBody PageRequest pageRequest) {
 
-
         String username = jwt.getClaimAsString("username");
         log.info("Getting registrations for event: {} by user: {}", eventId, username);
 

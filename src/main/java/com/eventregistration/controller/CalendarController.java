@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventregistration.dto.ApiResponse;
@@ -121,34 +120,34 @@ public class CalendarController {
                 .message("Calendar deleted successfully")
                 .build();
     }
-    
+
     @PostMapping("/{calendarId}/events")
-    @Operation(summary = "Add multiple events to calendar", description = "Add multiple existing events to a specific calendar for the authenticated user")
+    @Operation(
+            summary = "Add multiple events to calendar",
+            description = "Add multiple existing events to a specific calendar for the authenticated user")
     public ApiResponse<List<EventResponse>> addEventsToCalendar(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable UUID calendarId,
-            @RequestBody List<UUID> eventIds) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID calendarId, @RequestBody List<UUID> eventIds) {
 
         String username = jwt.getClaimAsString("username");
         log.info("Adding {} events to calendar {} for user: {}", eventIds.size(), calendarId, username);
-        
+
         calendarService.addEventsToCalendar(calendarId, eventIds, username);
 
         return ApiResponse.<List<EventResponse>>builder()
                 .message("Events added to calendar successfully")
                 .build();
     }
-    
+
     @PostMapping("/{calendarId}/events/{eventId}")
-    @Operation(summary = "Add existing event to calendar", description = "Add an existing event to a specific calendar for the authenticated user")
+    @Operation(
+            summary = "Add existing event to calendar",
+            description = "Add an existing event to a specific calendar for the authenticated user")
     public ApiResponse<EventResponse> addEventToCalendar(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable UUID calendarId,
-            @PathVariable UUID eventId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID calendarId, @PathVariable UUID eventId) {
 
         String username = jwt.getClaimAsString("username");
         log.info("Adding event {} to calendar {} for user: {}", eventId, calendarId, username);
-        
+
         EventResponse response = calendarService.addEventToCalendar(calendarId, eventId, username);
 
         return ApiResponse.<EventResponse>builder()

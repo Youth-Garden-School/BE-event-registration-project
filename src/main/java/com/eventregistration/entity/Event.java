@@ -30,8 +30,8 @@ public class Event extends BaseAuthor {
     LocalDateTime startTime;
     LocalDateTime endTime;
     String location;
-    
-    String category; 
+
+    String category;
 
     @Builder.Default
     boolean isOnline = false;

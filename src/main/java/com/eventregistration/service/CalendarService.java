@@ -18,8 +18,8 @@ public interface CalendarService {
     CalendarResponse updateCalendar(UUID calendarId, CalendarUpdateRequest request, String username);
 
     void deleteCalendar(UUID calendarId, String username);
-    
+
     EventResponse addEventToCalendar(UUID calendarId, UUID eventId, String username);
-    
+
     List<EventResponse> addEventsToCalendar(UUID calendarId, List<UUID> eventIds, String username);
 }

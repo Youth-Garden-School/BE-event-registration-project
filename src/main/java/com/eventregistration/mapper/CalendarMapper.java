@@ -29,6 +29,7 @@ public interface CalendarMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "coverImage", source = "request.coverImage")
     @Mapping(target = "avatarImage", source = "request.avatarImage")
+    @Mapping(target = "description", source = "request.description")
     Calendar toEntity(CalendarCreationRequest request, User user);
 
     @Mapping(target = "id", ignore = true)
