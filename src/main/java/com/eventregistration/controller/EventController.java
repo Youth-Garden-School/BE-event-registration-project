@@ -73,7 +73,6 @@ public class EventController {
     @Operation(summary = "Get event by ID", description = "Get a specific event by ID for the authenticated user")
     public ApiResponse<EventResponse> getEventById(@PathVariable UUID eventId) {
 
-
         EventResponse event = eventService.getUserEventById(eventId);
 
         return ApiResponse.<EventResponse>builder()

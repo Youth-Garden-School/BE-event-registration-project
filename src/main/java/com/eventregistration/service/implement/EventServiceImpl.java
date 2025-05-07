@@ -9,21 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriUtils;
 
+import com.eventregistration.constant.AttendeeStatus;
 import com.eventregistration.dto.request.EventCreationRequest;
 import com.eventregistration.dto.request.EventUpdateRequest;
 import com.eventregistration.dto.response.EventResponse;
 import com.eventregistration.entity.Calendar;
 import com.eventregistration.entity.Event;
-import com.eventregistration.entity.User;
 import com.eventregistration.entity.EventAttendee;
-import com.eventregistration.constant.AttendeeStatus;
+import com.eventregistration.entity.User;
 import com.eventregistration.exception.AppException;
 import com.eventregistration.exception.ErrorCode;
 import com.eventregistration.mapper.EventMapper;
 import com.eventregistration.repository.CalendarRepository;
+import com.eventregistration.repository.EventAttendeeRepository;
 import com.eventregistration.repository.EventRepository;
 import com.eventregistration.repository.UserRepository;
-import com.eventregistration.repository.EventAttendeeRepository;
 import com.eventregistration.service.EmailService;
 import com.eventregistration.service.EventService;
 
@@ -46,9 +46,9 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventResponse createEvent(EventCreationRequest request, String username) {
         // Tìm người dùng từ username
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
         Event.EventBuilder<?, ?> eventBuilder = Event.builder()
                 .title(request.title())
                 .description(request.description())
@@ -77,23 +77,23 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventBuilder.build();
         Event savedEvent = eventRepository.save(event);
-        
+
         // Tự động đăng ký người dùng tạo sự kiện vào sự kiện đó
         String email = user.getEmails().stream()
                 .filter(e -> e.isPrimary())
                 .findFirst()
                 .map(e -> e.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_EMAIL_NOT_FOUND));
-        
+
         EventAttendee attendee = EventAttendee.builder()
                 .event(savedEvent)
                 .user(user)
                 .email(email)
                 .status(AttendeeStatus.CONFIRMED)
                 .build();
-        
+
         eventAttendeeRepository.save(attendee);
-        
+
         return eventMapper.toResponse(savedEvent);
     }
 

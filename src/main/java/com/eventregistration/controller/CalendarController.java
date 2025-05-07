@@ -62,7 +62,6 @@ public class CalendarController {
     @Operation(summary = "Get user calendars", description = "Get all calendars for the authenticated user")
     public ApiResponse<List<CalendarResponse>> getUserCalendars() {
 
-
         List<CalendarResponse> calendars = calendarService.getUserCalendars();
 
         return ApiResponse.<List<CalendarResponse>>builder()

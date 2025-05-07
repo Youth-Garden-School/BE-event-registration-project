@@ -16,12 +16,10 @@ public record CalendarResponse(
         @Schema(description = "Calendar detailed description") String description,
         @Schema(description = "Events in this calendar") List<EventResponse> events,
         @Schema(description = "Creation timestamp") LocalDateTime createdAt,
-        @Schema(description = "Last update timestamp") LocalDateTime updatedAt,        
+        @Schema(description = "Last update timestamp") LocalDateTime updatedAt,
+        @Schema(description = "ID of user who created this calendar", example = "123e4567-e89b-12d3-a456-426614174000")
+                UUID createdBy,
         @Schema(
-                description = "ID of user who created this calendar",
-                example = "123e4567-e89b-12d3-a456-426614174000")
-        UUID createdBy,
-        @Schema(
-                description = "ID of user who last updated this calendar",
-                example = "123e4567-e89b-12d3-a456-426614174000")
-        UUID updatedBy) {}
+                        description = "ID of user who last updated this calendar",
+                        example = "123e4567-e89b-12d3-a456-426614174000")
+                UUID updatedBy) {}
