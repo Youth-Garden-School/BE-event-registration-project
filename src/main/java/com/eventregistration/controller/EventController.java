@@ -59,11 +59,9 @@ public class EventController {
 
     @GetMapping
     @Operation(summary = "Get all user events", description = "Get all events created by the authenticated user")
-    public ApiResponse<List<EventResponse>> getUserEvents(@AuthenticationPrincipal Jwt jwt) {
-        String username = jwt.getClaimAsString("username");
-        log.info("Fetching events for user: {}", username);
+    public ApiResponse<List<EventResponse>> getUserEvents() {
 
-        List<EventResponse> events = eventService.getUserEvents(username);
+        List<EventResponse> events = eventService.getUserEvents();
 
         return ApiResponse.<List<EventResponse>>builder()
                 .message("Events fetched successfully")
@@ -73,12 +71,10 @@ public class EventController {
 
     @GetMapping("/{eventId}")
     @Operation(summary = "Get event by ID", description = "Get a specific event by ID for the authenticated user")
-    public ApiResponse<EventResponse> getEventById(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID eventId) {
+    public ApiResponse<EventResponse> getEventById(@PathVariable UUID eventId) {
 
-        String username = jwt.getClaimAsString("username");
-        log.info("Fetching event {} for user: {}", eventId, username);
 
-        EventResponse event = eventService.getUserEventById(eventId, username);
+        EventResponse event = eventService.getUserEventById(eventId);
 
         return ApiResponse.<EventResponse>builder()
                 .message("Event fetched successfully")

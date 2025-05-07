@@ -11,9 +11,9 @@ import com.eventregistration.dto.response.EventResponse;
 public interface CalendarService {
     CalendarResponse createCalendar(CalendarCreationRequest request, String username);
 
-    List<CalendarResponse> getUserCalendars(String username);
+    List<CalendarResponse> getUserCalendars();
 
-    CalendarResponse getUserCalendarById(UUID calendarId, String username);
+    CalendarResponse getUserCalendarById(UUID calendarId);
 
     CalendarResponse updateCalendar(UUID calendarId, CalendarUpdateRequest request, String username);
 

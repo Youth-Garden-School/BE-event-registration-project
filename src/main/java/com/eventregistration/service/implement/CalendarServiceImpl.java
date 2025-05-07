@@ -60,27 +60,17 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CalendarResponse> getUserCalendars(String username) {
-        log.info("Fetching calendars for user: {}", username);
-
-        User user =
-                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        List<Calendar> calendars = calendarRepository.findByUserId(user.getId());
+    public List<CalendarResponse> getUserCalendars() {
+        List<Calendar> calendars = calendarRepository.findAll();
 
         return calendars.stream().map(calendarMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CalendarResponse getUserCalendarById(UUID calendarId, String username) {
-        log.info("Fetching calendar {} for user: {}", calendarId, username);
-
-        User user =
-                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
+    public CalendarResponse getUserCalendarById(UUID calendarId) {
         Calendar calendar = calendarRepository
-                .findByIdAndUserId(calendarId, user.getId())
+                .findById(calendarId)
                 .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
 
         return calendarMapper.toResponse(calendar);

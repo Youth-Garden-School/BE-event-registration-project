@@ -60,12 +60,10 @@ public class CalendarController {
 
     @GetMapping
     @Operation(summary = "Get user calendars", description = "Get all calendars for the authenticated user")
-    public ApiResponse<List<CalendarResponse>> getUserCalendars(@AuthenticationPrincipal Jwt jwt) {
+    public ApiResponse<List<CalendarResponse>> getUserCalendars() {
 
-        String username = jwt.getClaimAsString("username");
-        log.info("Getting calendars for user: {}", username);
 
-        List<CalendarResponse> calendars = calendarService.getUserCalendars(username);
+        List<CalendarResponse> calendars = calendarService.getUserCalendars();
 
         return ApiResponse.<List<CalendarResponse>>builder()
                 .message("Calendars retrieved successfully")
@@ -75,13 +73,11 @@ public class CalendarController {
 
     @GetMapping("/{calendarId}")
     @Operation(summary = "Get calendar by ID", description = "Get a specific calendar by ID for the authenticated user")
-    public ApiResponse<CalendarResponse> getCalendarById(
-            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID calendarId) {
+    public ApiResponse<CalendarResponse> getCalendarById(@PathVariable UUID calendarId) {
 
-        String username = jwt.getClaimAsString("username");
-        log.info("Getting calendar {} for user: {}", calendarId, username);
+        log.info("Getting calendar {} for user: {}", calendarId);
 
-        CalendarResponse calendar = calendarService.getUserCalendarById(calendarId, username);
+        CalendarResponse calendar = calendarService.getUserCalendarById(calendarId);
 
         return ApiResponse.<CalendarResponse>builder()
                 .message("Calendar retrieved successfully")

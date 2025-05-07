@@ -23,7 +23,7 @@ public interface EventService {
      * @param username Username of the authenticated user
      * @return List of events
      */
-    List<EventResponse> getUserEvents(String username);
+    List<EventResponse> getUserEvents();
 
     /**
      * Get a specific event by ID for a user
@@ -32,7 +32,7 @@ public interface EventService {
      * @param username Username of the authenticated user
      * @return Event response
      */
-    EventResponse getUserEventById(UUID eventId, String username);
+    EventResponse getUserEventById(UUID eventId);
 
     List<EventResponse> getEventsByCategory(String category);
 
