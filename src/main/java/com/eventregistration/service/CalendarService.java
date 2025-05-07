@@ -22,4 +22,6 @@ public interface CalendarService {
     EventResponse addEventToCalendar(UUID calendarId, UUID eventId, String username);
 
     List<EventResponse> addEventsToCalendar(UUID calendarId, List<UUID> eventIds, String username);
+
+    void removeEventFromCalendar(UUID calendarId, UUID eventId, String username);
 }

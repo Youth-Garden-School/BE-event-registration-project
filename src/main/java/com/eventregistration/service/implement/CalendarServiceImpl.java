@@ -184,4 +184,33 @@ public class CalendarServiceImpl implements CalendarService {
 
         return savedEvents.stream().map(eventMapper::toResponse).collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public void removeEventFromCalendar(UUID calendarId, UUID eventId, String username) {
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Calendar calendar = calendarRepository
+                .findById(calendarId)
+                .orElseThrow(() -> new AppException(ErrorCode.CALENDAR_NOT_FOUND));
+
+        if (!calendar.getUser().getId().equals(user.getId())) {
+            throw new AppException(ErrorCode.CALENDAR_UNAUTHORIZED_ACCESS);
+        }
+
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AppException(ErrorCode.EVENT_NOT_FOUND));
+
+        if (event.getCalendar() == null || !event.getCalendar().getId().equals(calendarId)) {
+            throw new AppException(ErrorCode.EVENT_NOT_IN_CALENDAR);
+        }
+
+        // Loại bỏ event khỏi calendar
+        event.setCalendar(null);
+        event.setUpdatedAt(LocalDateTime.now());
+        event.setUpdatedBy(user.getId());
+
+        eventRepository.save(event);
+        log.info("Event {} removed from calendar {}", eventId, calendarId);
+    }
 }

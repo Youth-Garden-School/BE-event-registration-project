@@ -150,4 +150,21 @@ public class CalendarController {
                 .result(response)
                 .build();
     }
+
+    @DeleteMapping("/{calendarId}/events/{eventId}")
+    @Operation(
+            summary = "Remove event from calendar",
+            description = "Remove an existing event from a specific calendar for the authenticated user")
+    public ApiResponse<Void> removeEventFromCalendar(
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID calendarId, @PathVariable UUID eventId) {
+
+        String username = jwt.getClaimAsString("username");
+        log.info("Removing event {} from calendar {} for user: {}", eventId, calendarId, username);
+
+        calendarService.removeEventFromCalendar(calendarId, eventId, username);
+
+        return ApiResponse.<Void>builder()
+                .message("Event removed from calendar successfully")
+                .build();
+    }
 }

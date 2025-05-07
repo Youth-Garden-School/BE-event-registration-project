@@ -118,6 +118,7 @@ public enum ErrorCode {
     EVENT_INVALID_TIME_RANGE(2004, "Thời gian kết thúc phải sau thời gian bắt đầu", HttpStatus.BAD_REQUEST),
     EVENT_UNAUTHORIZED_ACCESS(2005, "Bạn không có quyền truy cập sự kiện này", HttpStatus.FORBIDDEN),
     EVENT_ALREADY_IN_CALENDAR(2006, "Sự kiện này đã được thêm vào lịch", HttpStatus.BAD_REQUEST),
+    EVENT_NOT_IN_CALENDAR(2007, "Sự kiện không thuộc lịch này", HttpStatus.BAD_REQUEST),
 
     // REGISTRATION ERROR (2100-2199)
     USER_ALREADY_REGISTERED(2100, "Người dùng đã đăng ký tham gia sự kiện này", HttpStatus.BAD_REQUEST),
