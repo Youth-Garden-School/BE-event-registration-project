@@ -37,13 +37,9 @@ public class SecurityConfig {
         "/actuator/**", // For Spring Boot Actuator if used
         "/events/*/registrations/guest"
     };
-    
+
     private static final String[] PUBLIC_GET_ENDPOINTS = {
-        "/events",
-        "/events/*",
-        "/events/category",
-        "/calendars",
-        "/calendars/*"
+        "/events", "/events/*", "/events/category", "/calendars", "/calendars/*"
     };
 
     @Bean
