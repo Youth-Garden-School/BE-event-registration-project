@@ -72,7 +72,7 @@ public class EventRegistrationController {
                 .build();
     }
 
-    @PostMapping("/events/{eventId}/registrations")
+    @PostMapping("/events/{eventId}/registrations/get")
     @Operation(
             summary = "Get event registrations",
             description = "Get all registrations for an event (event owner only)")
