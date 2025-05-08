@@ -37,6 +37,14 @@ public class SecurityConfig {
         "/actuator/**", // For Spring Boot Actuator if used
         "/events/*/registrations/guest"
     };
+    
+    private static final String[] PUBLIC_GET_ENDPOINTS = {
+        "/events",
+        "/events/*",
+        "/events/category",
+        "/calendars",
+        "/calendars/*"
+    };
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -45,6 +53,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS)
                         .permitAll()
                         .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS)
                         .permitAll()
