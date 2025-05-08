@@ -35,7 +35,8 @@ public class SecurityConfig {
         "/swagger-ui/**", // For Swagger UI
         "/api-documentation/**", // For your custom Swagger path
         "/actuator/**", // For Spring Boot Actuator if used
-        "/events/*/registrations/guest"
+        "/events/**",
+        "/events/*",
     };
 
     private static final String[] PUBLIC_GET_ENDPOINTS = {
