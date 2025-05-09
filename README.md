@@ -173,3 +173,5 @@ Regista là một ứng dụng web được thiết kế để đơn giản hóa
 | merge     | Merge branches |
 
 ## Demo
+[Video Demo](https://youtu.be/LPepD-YM59Q)
+**Mô tả**: Video giới thiệu các chức năng chính của Regista.
