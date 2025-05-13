@@ -1,5 +1,7 @@
 package com.eventregistration.service.implement;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -51,6 +53,41 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
 
         AttendeeStatus initialStatus = event.isRequiresApproval() ? AttendeeStatus.PENDING : AttendeeStatus.CONFIRMED;
 
+        // Kiểm tra xem người dùng đã đăng ký trước đó chưa
+        if (username != null) {
+            User user = userRepository
+                    .findByUsername(username)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+            // Kiểm tra xem người dùng đã đăng ký trước đó chưa
+            List<EventAttendee> existingAttendees = eventAttendeeRepository.findByEventId(eventId);
+            Optional<EventAttendee> existingAttendee = existingAttendees.stream()
+                    .filter(att ->
+                            att.getUser() != null && att.getUser().getId().equals(user.getId()))
+                    .findFirst();
+
+            if (existingAttendee.isPresent()) {
+                EventAttendee attendee = existingAttendee.get();
+                // Nếu trạng thái là CANCELLED, chuyển thành CONFIRMED hoặc PENDING tùy theo cấu hình sự kiện
+                if (attendee.getStatus() == AttendeeStatus.CANCELLED) {
+                    attendee.setStatus(initialStatus);
+                    attendee.setNotes(request.notes());
+                    EventAttendee savedAttendee = eventAttendeeRepository.save(attendee);
+
+                    try {
+                        emailService.sendEventRegistrationEmail(event, savedAttendee);
+                        log.info("Registration confirmation email sent to: {}", savedAttendee.getEmail());
+                    } catch (Exception e) {
+                        log.error("Failed to send registration email", e);
+                    }
+
+                    return eventAttendeeMapper.toRegistrationResponse(savedAttendee);
+                } else {
+                    throw new AppException(ErrorCode.USER_ALREADY_REGISTERED);
+                }
+            }
+        }
+
         EventAttendee.EventAttendeeBuilder attendeeBuilder =
                 EventAttendee.builder().event(event).status(initialStatus).notes(request.notes());
 
@@ -58,10 +95,6 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
             User user = userRepository
                     .findByUsername(username)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-            if (eventAttendeeRepository.existsByEventIdAndUserId(eventId, user.getId())) {
-                throw new AppException(ErrorCode.USER_ALREADY_REGISTERED);
-            }
 
             attendeeBuilder.user(user);
 
@@ -77,8 +110,31 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
                 throw new AppException(ErrorCode.GUEST_EMAIL_REQUIRED);
             }
 
-            if (eventAttendeeRepository.existsByEventIdAndEmail(eventId, request.guestEmail())) {
-                throw new AppException(ErrorCode.EMAIL_ALREADY_REGISTERED);
+            // Kiểm tra xem email khách đã đăng ký trước đó chưa
+            List<EventAttendee> existingAttendees = eventAttendeeRepository.findByEventId(eventId);
+            Optional<EventAttendee> existingAttendee = existingAttendees.stream()
+                    .filter(att -> att.getEmail().equalsIgnoreCase(request.guestEmail()))
+                    .findFirst();
+
+            if (existingAttendee.isPresent()) {
+                EventAttendee attendee = existingAttendee.get();
+                // Nếu trạng thái là CANCELLED, chuyển thành CONFIRMED hoặc PENDING tùy theo cấu hình sự kiện
+                if (attendee.getStatus() == AttendeeStatus.CANCELLED) {
+                    attendee.setStatus(initialStatus);
+                    attendee.setNotes(request.notes());
+                    EventAttendee savedAttendee = eventAttendeeRepository.save(attendee);
+
+                    try {
+                        emailService.sendEventRegistrationEmail(event, savedAttendee);
+                        log.info("Registration confirmation email sent to: {}", savedAttendee.getEmail());
+                    } catch (Exception e) {
+                        log.error("Failed to send registration email", e);
+                    }
+
+                    return eventAttendeeMapper.toRegistrationResponse(savedAttendee);
+                } else {
+                    throw new AppException(ErrorCode.EMAIL_ALREADY_REGISTERED);
+                }
             }
 
             attendeeBuilder.email(request.guestEmail());

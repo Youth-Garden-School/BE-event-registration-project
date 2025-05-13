@@ -14,7 +14,7 @@ import com.eventregistration.entity.EventAttendee;
 public interface EventAttendeeMapper {
 
     @Mapping(target = "event", source = "event")
-    @Mapping(target = "user", source = "user")
     @Mapping(target = "registeredAt", source = "createdAt")
+    @Mapping(target = "user", source = "user")
     EventRegistrationResponse toRegistrationResponse(EventAttendee eventAttendee);
 }
