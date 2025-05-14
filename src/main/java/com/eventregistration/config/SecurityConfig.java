@@ -78,6 +78,8 @@ public class SecurityConfig {
                 "https://localhost:3001",
                 "https://localhost:3000",
                 "https://backend-production-7ea7.up.railway.app",
+                "https://regista4e.vercel.app",
+                "https://be-event-registration-project-jpv3.onrender.com",
                 "https://wordwaves.vercel.app"));
 
         configuration.setAllowedMethods(List.of("*"));
